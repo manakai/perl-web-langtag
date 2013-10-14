@@ -1,55 +1,76 @@
 =head1 NAME
 
-Whatpm::LangTag - Language Tag Parsing, Conformance Checking, and Normalization
+Web::LangTag - Language Tag Parsing, Conformance Checking, and Normalization
 
 =head1 SYNOPSIS
 
-  use Whatpm::LangTag;
+  use Web::LangTag;
   
-  $parsed = Whatpm::LangTag->parse_rfc5646_tag ($tag, $onerror);
-  Whatpm::LangTag->check_rfc5646_parsed_tag ($parsed, $onerror);
-  $tag = Whatpm::LangTag->normalize_rfc5646_tag ($tag);
+  my $lt = Web::LangTag->new;
+  $lt->onerror ($code);
+  $parsed = $lt->parse_tag ($tag);
+  $result = $lt->check_parsed_tag ($parsed);
+  $tag = $lt->normalize_tag ($tag);
 
 =head1 DESCRIPTION
 
-The C<Whatpm::LangTag> module contains methods to handle language tags
-as defined by BCP 47.  It can be used to parse, validate, or normalize
+The C<Web::LangTag> module contains methods to handle language tags as
+defined by BCP 47.  It can be used to parse, validate, or normalize
 language tags according to relevant standard.
 
 =head1 METHODS
 
-For the following strings, if an input or output is a language tag or
-a language range, it is a character string (or possibly utf8 flagged
-string of characters), not a byte string.  Although language tags and
-ranges are specified as a string of ASCII characters, illegal tags and
-ranges can always contain any non-ASCII characters.
+For the following methods, if an input or output is a language tag or
+a language range, it is interpreted as a character string (or possibly
+utf8 flagged string of characters), not a byte string.  Note that
+although language tags and ranges are specified as a string of ASCII
+characters, illegal tags and ranges can always contain any non-ASCII
+characters.
 
-=head2 PARSING
+Since relevant standards have been incompatibly changed, a language
+tag comformant to old standard can be non-conforming according to the
+latest standard.  For this reason, the module provides parsing,
+validating, and normalizing methods for every versions of standards.
+However, in general, you should simply use B<non-versioned> methods.
 
 =over 4
 
-=item $parsed = Whatpm::LangTag->parse_tag ($tag, $onerror)
+=item $lt = Web::LangTag->new
+
+Create a new language tag processor.
+
+=item $lt->onerror ($code)
+
+=item $code = $lt->onerror
+
+Get or set the error handler for the processor.  Any parse or
+conformance error, as well as warning and information, is reported to
+the handler.  See L<Whatpm::Errors>
+<https://github.com/wakaba/manakai/blob/master/lib/Whatpm/Errors.pod>
+and L</ERRORS> for more information.
+
+=back
+
+=head2 Parsing
+
+=over 4
+
+=item $parsed = $lt->parse_tag ($tag)
 
 Parses a language tag into subtags.  This method interprets the
 language tag using the latest version of the language tag
 specification.  At the time of writing, the latest version is RFC
 5646.
 
-=item $parsed = Whatpm::LangTag->parse_rfc5646_tag ($tag, $onerror)
+=item $parsed = $lt->parse_rfc5646_tag ($tag)
 
 Parses a language tag into subtags.  This method interprets the
 language tag using the definition in RFC 5646.
 
-Any errors and warnings would be reported to the code refeference
-specified as the second argument.
-
-=item $parsed = Whatpm::LangTag->parse_rfc4646_tag ($tag, $onerror)
+=item $parsed = $lt->parse_rfc4646_tag ($tag)
 
 Parses a language tag into subtags.  This method interprets the
 language tag using the definition in RFC 4646.
-
-Any errors and warnings would be reported to the code refeference
-specified as the second argument.
 
 =back
 
@@ -68,11 +89,11 @@ for input C<ja-JP>.
 
 The extlang subtags.  E.g. C<'yue'> for input C<zh-yue>.
 
-=item script (string or undef)
+=item script (string or C<undef>)
 
 The script subtag.  E.g. C<'Latn'> for input C<ja-Latn-JP>.
 
-=item region (string or undef)
+=item region (string or C<undef>)
 
 The region subtag.  E.g. C<'JP'> for input C<en-JP>.
 
@@ -95,7 +116,7 @@ C<x-pig-latin>.
 Illegal (syntactically non-conforming) string fragments.
 E.g. C<['1234', 'xyz', 'abc']> for input C<1234-xyz-abc>.
 
-=item grandfathered (string or undef)
+=item grandfathered (string or C<undef>)
 
 "Grandfathered" language tag.  E.g. C<'i-default'> for input
 C<i-default>.
@@ -112,11 +133,11 @@ input C<ja-u-ca-japanese-va-0061-0061>.
 
 =back
 
-=head2 SERIALIZATION
+=head2 Serialization
 
 =over 4
 
-=item $tag = Whatpm::LangTag->serialize_parsed_tag ($parsed_tag)
+=item $tag = $lt->serialize_parsed_tag ($parsed_tag)
 
 Convert a parsed language tag into a language tag string.  The
 argument must be a parsed tag as defined in the previous section; a
@@ -127,32 +148,29 @@ the result string would not be a well-formed language tag.
 
 =back
 
-=head2 CONFORMANCE CHECKING
+=head2 Conformance checking (validation)
 
 =over 4
 
-=item Whatpm::LangTag->check_parsed_tag ($parsed, $onerror)
+=item $result = $lt->check_parsed_tag ($parsed)
 
 Checks for conformance errors in the parsed language tag, against the
 latest version of the language tag specification.  At the time of
 writing, the latest version is RFC 5646.
 
-=item Whatpm::LangTag->check_rfc5646_parsed_tag ($parsed, $onerror)
+=item $result = $lt->check_rfc5646_parsed_tag ($parsed)
 
 Checks for conformance errors in the parsed language tag, against RFC
 5646.
 
-This method does not report any parse erros, as this method receives a
-B<parsed> language tag.
-
-Any errors and warnings would be reported to the code refeference
-specified as the second argument.
+This method does not report any parse errors, as this method receives
+a B<parsed> language tag.
 
 The method returns a hash reference with two keys: C<well-formed> and
 C<valid>.  They represent whether the given language tag is
 well-formed or valid or not as per RFC 5646.
 
-=item Whatpm::LangTag->check_rfc4646_parsed_tag ($parsed, $onerror)
+=item $result = $lt->check_rfc4646_parsed_tag ($parsed)
 
 Checks for conformance errors in the parsed language tag, against RFC
 4646.
@@ -160,28 +178,23 @@ Checks for conformance errors in the parsed language tag, against RFC
 This method does not report any parse erros, as this method receives a
 B<parsed> language tag.
 
-Any errors and warnings would be reported to the code refeference
-specified as the second argument.
-
 The method returns a hash reference with two keys: C<well-formed> and
 C<valid>.  They represent whether the given language tag is
 well-formed or valid or not as per RFC 4646.
 
-=item Whatpm::LangTag->check_rfc3066_tag ($tag, $onerror)
+=item $result = $lt->check_rfc3066_tag ($tag)
 
 Parses and checks for conformance errors in the parsed language tag,
 against RFC 3066.
 
-Any errors and warnings would be reported to the code refeference
-specified as the second argument.
+The method returns an empty hash reference.
 
-=item Whatpm::LangTag->check_rfc1766_tag ($tag, $onerror)
+=item $result = $lt->check_rfc1766_tag ($tag)
 
 Parses and checks for conformance errors in the parsed language tag,
 against RFC 1766.
 
-Any errors and warnings would be reported to the code refeference
-specified as the second argument.
+The method returns an empty hash reference.
 
 =back
 
@@ -192,20 +205,20 @@ be used where they add useful distinguishing information" (RFC 4646
 4.1.), and "Use as precise a tag as possible, but no more specific
 than is justified" (RFC 4646 4.1. 1.).  These kinds of requirements
 cannot be tested without human interpretation, and therefore the
-methods in this module do not (or cannot) try to detect violation to
-these rules.
+methods in this module do not (or in fact cannot) try to detect
+violation to these rules.
 
-=head2 NORMALIZATION
+=head2 Normalization
 
 =over 4
 
-=item $tag = Whatpm::LangTag->normalize_tag ($tag_orig)
+=item $tag = $lt->normalize_tag ($tag_orig)
 
 Normalize the language tag by folding cases, following the latest
 version of the language tag specification.  At the time of writing,
 the latest version is RFC 5646.
 
-=item $tag = Whatpm::LangTag->normalize_rfc5646_tag ($tag_orig)
+=item $tag = $lt->normalize_rfc5646_tag ($tag_orig)
 
 Normalize the language tag by folding cases, following RFC 5646
 2.1. and 2.2.6.  Note that this method does not replace any subtag
@@ -216,13 +229,13 @@ Although this method does not completely convert language tags into
 their canonical form, its result will be good enough for comparison in
 most usual situations.
 
-=item $tag = Whatpm::LangTag->canonicalize_tag ($tag_orig)
+=item $tag = $lt->canonicalize_tag ($tag_orig)
 
 Normalize the language tag into its canonicalized form, as per the
 latest version of the language tag specification.  At the time of
 writing, the latest version is RFC 5646.
 
-=item $tag = Whatpm::LangTag->canonicalize_rfc5646_tag ($tag_orig)
+=item $tag = $lt->canonicalize_rfc5646_tag ($tag_orig)
 
 Normalize the language tag into its canonicalized form, as per RFC
 5646 4.5.  That is, replace any subtag into its Preferred-Value form
@@ -236,13 +249,13 @@ RFC 5646, the result string might not be a well-formed language tag as
 well.  Sometimes the canonicalization would turn a valid langauge tag
 into an invalid language tag.
 
-=item $tag = Whatpm::LangTag->to_extlang_form_tag ($tag_orig)
+=item $tag = $lt->to_extlang_form_tag ($tag_orig)
 
 Normalize the language tag into its extlang form, as per the latest
 version of the language tag specification.  At the time of writing,
 the latest version is RFC 5646.
 
-=item $tag = Whatpm::LangTag->to_extlang_form_rfc5646_tag ($tag_orig)
+=item $tag = $lt->to_extlang_form_rfc5646_tag ($tag_orig)
 
 Normalize the language tag into its extlang form, as per RFC 5646 4.5.
 The extlang form is same as the canonicalized form, except that use of
@@ -256,17 +269,17 @@ into an invalid language tag.
 
 =back
 
-=head2 COMPARISON
+=head2 Comparison
 
 =over 4
 
-=item BOOL = Whatpm::LangTag->basic_filtering_range ($range, $tag)
+=item $boolean = $lt->basic_filtering_range ($range, $tag)
 
 Compares a basic language range to a language tag, according to the
 latest version of the language range specification.  At the time of
 writing, the latest version is RFC 4645.
 
-=item BOOL = Whatpm::LangTag->basic_filtering_rfc4647_range ($range, $tag)
+=item $boolean = $lt->basic_filtering_rfc4647_range ($range, $tag)
 
 Compares a basic language range to a language tag, according to RFC
 4647 Section 3.3.1.  This method returns whether the range matches to
@@ -275,7 +288,7 @@ the tag or not.
 A basic language range is either a language tag or C<*>.  (For more
 information, see RFC 4647 Section 2.1.).
 
-=item BOOL = Whatpm::LangTag->match_rfc3066_range ($range, $tag)
+=item $boolean = $lt->match_rfc3066_range ($range, $tag)
 
 Compares a language-range to a language tag according to RFC 3066
 Section 2.5.  This method returns whether the range matches to the tag
@@ -287,13 +300,13 @@ information, see RFC 3066 2.5).
 Note that this method is equivalent to
 C<basic_filtering_rfc4647_range> by definition.
 
-=item BOOL = Whatpm::LangTag->extended_filtering_range ($range, $tag)
+=item $boolean = $lt->extended_filtering_range ($range, $tag)
 
 Compares an extended language range to a language tag, according to
 the latest version of the language range specification.  At the time
 of writing, the latest version is RFC 4647.
 
-=item BOOL = Whatpm::LangTag->extended_filtering_rfc4647_range ($range, $tag)
+=item $boolean = $lt->extended_filtering_rfc4647_range ($range, $tag)
 
 Compares an extended language range to a language tag, according to
 RFC 4647 Section 3.3.2.  This method returns whether the range matches
@@ -320,16 +333,16 @@ reference as arguments:
 
 A short string describing the kind of the error.  Descriptions of
 error types are available at
-<http://suika.fam.cx/gate/2007/html/error-description#{type}>, where
-I<{type}> is an error type string.
+<http://suika.suikawiki.org/gate/2007/html/error-description#{type}>,
+where I<{type}> is an error type string.
 
 For the list of error types, see
-<http://suika.fam.cx/gate/2007/html/error-description#langtag-errors>.
+<http://suika.suikawiki.org/gate/2007/html/error-description#langtag-errors>.
 
 =item text (string, possibily missing)
 
 A short string, which arguments the error type.  Its semantics depends
-on the error type. 
+on the error type.
 
 =item value (string, possibly missing)
 
@@ -344,17 +357,24 @@ warning), and C<i> (an informational notification).
 
 =back
 
-=head1 SEE ALSO
+=head1 SPECIFICATIONS
 
-RFC 1766 <http://tools.ietf.org/html/rfc1766>.
+RFC 1766: Tags for the Identification of Languages
+<http://tools.ietf.org/html/rfc1766>.
 
-RFC 3066 <http://tools.ietf.org/html/rfc3066>.
+RFC 3066: Tags for the Identification of Languages
+<http://tools.ietf.org/html/rfc3066>.
 
-RFC 4646 <http://tools.ietf.org/html/rfc4646>.
+RFC 4646: Tags for Identifying Languages
+<http://tools.ietf.org/html/rfc4646>.
 
-RFC 4647 <http://tools.ietf.org/html/rfc4647>.
+RFC 4647: Matching of Language Tags
+<http://tools.ietf.org/html/rfc4647>.
 
-RFC 5646 <http://tools.ietf.org/html/rfc5646>.
+RFC 5646: Tags for Identifying Languages
+<http://tools.ietf.org/html/rfc5646>.
+
+RFC 6067: BCP 47 Extension U <http://tools.ietf.org/html/rfc6067>.
 
 IANA Language Subtag Registry
 <http://www.iana.org/assignments/language-subtag-registry>.
@@ -369,39 +389,18 @@ Unicode Locale Extension (‘u’) for BCP 47
 <http://cldr.unicode.org/index/bcp47-extension>,
 <http://unicode.org/repos/cldr/trunk/common/bcp47/>.
 
+=head1 SEE ALSO
+
 SuikaWiki:Language Tags
-<http://suika.fam.cx/~wakaba/wiki/sw/n/language%20tags>
-
-=head1 HISTORY
-
-=over 4
-
-=item 2007-09-09
-
-First version.
-
-=item 2011-09-24
-
-Implemented RFC 5646.  Implemented comparison.  Implemented RFC 1766.
-
-=item 2011-10-01
-
-Implemented the C<u> extension.
-
-=item 2011-10-02
-
-Implemented full validation of RFC 3066 and RFC 1766 language tags.
-Added unversioned aliases for operations.
-
-=back
+<http://suika.suikawiki.org/~wakaba/wiki/sw/n/language%20tags>
 
 =head1 AUTHOR
 
-Wakaba <w@suika.fam.cx>.
+Wakaba <wakaba@suikawiki.org>.
 
 =head1 LICENSE
 
-Copyright 2007-2011 Wakaba <w@suika.fam.cx>.
+Copyright 2007-2013 Wakaba <wakaba@suikawiki.org>.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

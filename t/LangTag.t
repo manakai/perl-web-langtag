@@ -1,14 +1,15 @@
-package test::Whatpm::LangTag;
+package test::Web::LangTag;
 use strict;
 use warnings;
 use Path::Class;
-use lib file (__FILE__)->dir->parent->subdir ('lib')->stringify;
-use lib file (__FILE__)->dir->parent->subdir ('modules', 'testdataparser', 'lib')->stringify;
+use lib file (__FILE__)->dir->parent->subdir ('t_deps', 'modules', 'testdataparser', 'lib')->stringify;
 use base qw(Test::Class);
-require Whatpm::LangTag;
 use Test::More;
 use Test::Differences;
 use Test::HTCT::Parser;
+use Web::LangTag;
+
+my $data_d = file (__FILE__)->dir->parent->subdir ('t_deps', 'tests', 'langtags');
 
 sub _parse : Tests {
   for_each_test ($_, {
@@ -18,6 +19,7 @@ sub _parse : Tests {
     5646 => {is_list => 1},
   }, sub {
     my $test = shift;
+    my $lt = Web::LangTag->new;
     
     our @errors = ();
     my $onerror = sub {
@@ -28,14 +30,15 @@ sub _parse : Tests {
           defined $opt{value} ? $opt{value} : '',
           $opt{level};
     }; # $onerror
+    $lt->onerror ($onerror);
     
     {
       local @errors;
 
-      my $parsed = Whatpm::LangTag->parse_rfc4646_tag
-          ($test->{data}->[0], $onerror);
-      my $result = Whatpm::LangTag->check_rfc4646_parsed_tag
-          ($parsed, $onerror);
+      my $parsed = $lt->parse_rfc4646_tag
+          ($test->{data}->[0]);
+      my $result = $lt->check_rfc4646_parsed_tag
+          ($parsed);
       
       my $expected = $test->{4646};
       if ($expected) {
@@ -54,10 +57,10 @@ sub _parse : Tests {
     {
       local @errors;
       
-      my $parsed = Whatpm::LangTag->parse_rfc5646_tag
-          ($test->{data}->[0], $onerror);
-      my $result = Whatpm::LangTag->check_rfc5646_parsed_tag
-          ($parsed, $onerror);
+      my $parsed = $lt->parse_rfc5646_tag
+          ($test->{data}->[0]);
+      my $result = $lt->check_rfc5646_parsed_tag
+          ($parsed);
 
       my $expected = $test->{5646} || $test->{4646};
       if ($expected) {
@@ -69,11 +72,11 @@ sub _parse : Tests {
         is !$result->{valid},
             !! grep { $_ eq 'ill-formed' or $_ eq 'invalid' } @{$expected->[1]};
 
-        my $canon = Whatpm::LangTag->canonicalize_rfc5646_tag
+        my $canon = $lt->canonicalize_rfc5646_tag
             ($test->{data}->[0]);
         is $canon, ($test->{canon5646} || $test->{data})->[0];
 
-        my $extlang = Whatpm::LangTag->to_extlang_form_rfc5646_tag
+        my $extlang = $lt->to_extlang_form_rfc5646_tag
             ($test->{data}->[0]);
         is $extlang, ($test->{extlang5646} || $test->{canon5646} || $test->{data})->[0];
       }
@@ -82,8 +85,8 @@ sub _parse : Tests {
     {
       local @errors;
       
-      my $result = Whatpm::LangTag->check_rfc3066_tag
-          ($test->{data}->[0], $onerror);
+      my $result = $lt->check_rfc3066_tag
+          ($test->{data}->[0]);
 
       my $expected = $test->{3066} || [['']];
       if ($expected) {
@@ -96,8 +99,8 @@ sub _parse : Tests {
     {
       local @errors;
       
-      my $result = Whatpm::LangTag->check_rfc1766_tag
-          ($test->{data}->[0], $onerror);
+      my $result = $lt->check_rfc1766_tag
+          ($test->{data}->[0]);
 
       my $expected = $test->{1766} || $test->{3066} || [['']];
       if ($expected) {
@@ -106,8 +109,8 @@ sub _parse : Tests {
             '_check1766 ' . $test->{data}->[0];
       }
     }
-  }) for map { file (__FILE__)->dir->file ($_)->stringify } qw[
-    langtag-1.dat
+  }) for map { $data_d->file ($_)->stringify } qw[
+    validity-core-1.dat
   ];
 } # _parse
 
@@ -117,6 +120,7 @@ sub _parse_check_extension : Tests {
     5646 => {is_list => 1},
   }, sub {
     my $test = shift;
+    my $lt = Web::LangTag->new;
     
     our @errors = ();
     my $onerror = sub {
@@ -127,14 +131,15 @@ sub _parse_check_extension : Tests {
           defined $opt{value} ? $opt{value} : '',
           $opt{level};
     }; # $onerror
+    $lt->onerror ($onerror);
     
     {
       local @errors;
 
-      my $parsed = Whatpm::LangTag->parse_rfc4646_tag
-          ($test->{data}->[0], $onerror);
-      my $result = Whatpm::LangTag->check_rfc4646_parsed_tag
-          ($parsed, $onerror);
+      my $parsed = $lt->parse_rfc4646_tag
+          ($test->{data}->[0]);
+      my $result = $lt->check_rfc4646_parsed_tag
+          ($parsed);
       
       my $expected = $test->{4646};
       if ($expected) {
@@ -153,10 +158,10 @@ sub _parse_check_extension : Tests {
     {
       local @errors;
       
-      my $parsed = Whatpm::LangTag->parse_rfc5646_tag
-          ($test->{data}->[0], $onerror);
-      my $result = Whatpm::LangTag->check_rfc5646_parsed_tag
-          ($parsed, $onerror);
+      my $parsed = $lt->parse_rfc5646_tag
+          ($test->{data}->[0]);
+      my $result = $lt->check_rfc5646_parsed_tag
+          ($parsed);
 
       my $expected = $test->{5646} || $test->{4646};
       if ($expected) {
@@ -168,22 +173,22 @@ sub _parse_check_extension : Tests {
         is !$result->{valid},
             !! grep { $_ eq 'ill-formed' or $_ eq 'invalid' } @{$expected->[1]};
 
-        my $canon = Whatpm::LangTag->canonicalize_rfc5646_tag
+        my $canon = $lt->canonicalize_rfc5646_tag
             ($test->{data}->[0]);
         is $canon, ($test->{canon5646} || $test->{data})->[0];
 
-        my $extlang = Whatpm::LangTag->to_extlang_form_rfc5646_tag
+        my $extlang = $lt->to_extlang_form_rfc5646_tag
             ($test->{data}->[0]);
         is $extlang, ($test->{extlang5646} || $test->{canon5646} || $test->{data})->[0];
       }
     }
-  }) for map { file (__FILE__)->dir->file ($_)->stringify } qw[
-    langtag-u-1.dat
+  }) for map { $data_d->file ($_)->stringify } qw[
+    validity-u-1.dat
   ];
 } # _parse
 
 sub _parse_zh_min_nan : Test(5) {
-  my $parsed1 = Whatpm::LangTag->parse_rfc4646_tag ('zh-min-nan');
+  my $parsed1 = Web::LangTag->new->parse_rfc4646_tag ('zh-min-nan');
   eq_or_diff $parsed1, {
     language => 'zh',
     extlang => [qw(min nan)],
@@ -193,7 +198,7 @@ sub _parse_zh_min_nan : Test(5) {
     extension => [],
   };
 
-  my $parsed2 = Whatpm::LangTag->parse_rfc5646_tag ('zh-min-nan');
+  my $parsed2 = Web::LangTag->new->parse_rfc5646_tag ('zh-min-nan');
   eq_or_diff $parsed2, {
     extlang => [],
     variant => [],
@@ -203,7 +208,7 @@ sub _parse_zh_min_nan : Test(5) {
     grandfathered => 'zh-min-nan',
   };
 
-  my $parsed3 = Whatpm::LangTag->parse_tag ('zh-min-nan');
+  my $parsed3 = Web::LangTag->new->parse_tag ('zh-min-nan');
   eq_or_diff $parsed3, {
     extlang => [],
     variant => [],
@@ -214,7 +219,9 @@ sub _parse_zh_min_nan : Test(5) {
   };
 
   my $error3 = 0;
-  my $result3 = Whatpm::LangTag->check_parsed_tag ($parsed3, sub { $error3++ });
+  my $lt = Web::LangTag->new;
+  $lt->onerror (sub { $error3++ });
+  my $result3 = $lt->check_parsed_tag ($parsed3);
   eq_or_diff $result3, {well_formed => 1, valid => 1};
   is $error3, 1;
 } # _parse_zh_min_nan
@@ -232,7 +239,7 @@ sub _parse_u_extension : Test(10) {
     ['en-U-abc', [qw[U abc]], [[qw[abc]]]],
     ['en-u-1ab', [qw[u 1ab]], [[qw[1ab]]]],
   ) {
-    my $parsed = Whatpm::LangTag->parse_rfc5646_tag ($_->[0]);
+    my $parsed = Web::LangTag->new->parse_rfc5646_tag ($_->[0]);
     eq_or_diff $parsed, {
       language => 'en',
       extlang => [],
@@ -261,14 +268,14 @@ sub _normalize : Test(26) {
     ['ja-latn-jp-i-ja-JP-Latn' => 'ja-Latn-JP-i-ja-JP-Latn'],
     ['ja-latn-jp-x-ja-JP-Latn' => 'ja-Latn-JP-x-ja-JP-Latn'],
   ) {
-    is +Whatpm::LangTag->normalize_rfc5646_tag ($_->[0]), $_->[1];
-    is +Whatpm::LangTag->normalize_tag ($_->[0]), $_->[1];
+    is +Web::LangTag->new->normalize_rfc5646_tag ($_->[0]), $_->[1];
+    is +Web::LangTag->new->normalize_tag ($_->[0]), $_->[1];
   }
 } # _normalize
 
 sub _canonicalize : Test(2) {
-  is +Whatpm::LangTag->canonicalize_tag ('zh-min-nan'), 'nan';
-  is +Whatpm::LangTag->to_extlang_form_tag ('zh-min-nan'), 'zh-nan';
+  is +Web::LangTag->new->canonicalize_tag ('zh-min-nan'), 'nan';
+  is +Web::LangTag->new->to_extlang_form_tag ('zh-min-nan'), 'zh-nan';
 } # _canonicalize
 
 sub _basic_filtering_rfc4647_range : Test(105) {
@@ -309,11 +316,11 @@ sub _basic_filtering_rfc4647_range : Test(105) {
      ['x', 'x-hoge-fuga', 1],
      ['x-', 'x-hoge-fuga', 0],
   ) {
-    is !!Whatpm::LangTag->basic_filtering_range ($_->[0], $_->[1]),
+    is !!Web::LangTag->new->basic_filtering_range ($_->[0], $_->[1]),
        !!$_->[2];
-    is !!Whatpm::LangTag->basic_filtering_rfc4647_range ($_->[0], $_->[1]),
+    is !!Web::LangTag->new->basic_filtering_rfc4647_range ($_->[0], $_->[1]),
        !!$_->[2];
-    is !!Whatpm::LangTag->match_rfc3066_range ($_->[0], $_->[1]),
+    is !!Web::LangTag->new->match_rfc3066_range ($_->[0], $_->[1]),
        !!$_->[2];
   }
 } # _basic_filtering_rfc4647_range
@@ -389,9 +396,9 @@ sub _extended_filtering_rfc4647_range : Test(136) {
      ['x', 'x-latn', 1],
      ['latn', 'x-latn', 0],
   ) {
-    is !!Whatpm::LangTag->extended_filtering_range ($_->[0], $_->[1]),
+    is !!Web::LangTag->new->extended_filtering_range ($_->[0], $_->[1]),
        !!$_->[2];
-    is !!Whatpm::LangTag->extended_filtering_rfc4647_range ($_->[0], $_->[1]),
+    is !!Web::LangTag->new->extended_filtering_rfc4647_range ($_->[0], $_->[1]),
        !!$_->[2];
   }
 } # _extended_filtering_rfc4647_range
@@ -402,7 +409,7 @@ sub _tag_registry_data : Test(60) {
     tag_registry_data_rfc5646
     tag_registry_data
   )) {
-    my $ja = Whatpm::LangTag->$method (language => 'ja');
+    my $ja = Web::LangTag->new->$method (language => 'ja');
     ok !$ja->{_canon};
     is $ja->{_added}, '2005-10-16';
     is $ja->{_suppress}, 'jpan';
@@ -411,7 +418,7 @@ sub _tag_registry_data : Test(60) {
     ok !$ja->{Prefix};
     eq_or_diff $ja->{Description}, ['Japanese'];
     
-    my $us = Whatpm::LangTag->$method (region => 'us');
+    my $us = Web::LangTag->new->$method (region => 'us');
     is $us->{_canon}, '_uppercase';
     is $us->{_added}, '2005-10-16';
     ok !$us->{_suppress};
@@ -420,17 +427,17 @@ sub _tag_registry_data : Test(60) {
     ok !$us->{Prefix};
     eq_or_diff $us->{Description}, ['United States'];
     
-    my $not_registered = Whatpm::LangTag->$method (script => 123);
+    my $not_registered = Web::LangTag->new->$method (script => 123);
     is $not_registered, undef;
     
-    my $no_type = Whatpm::LangTag->$method (bad => 'ja');
+    my $no_type = Web::LangTag->new->$method (bad => 'ja');
     is $no_type, undef;
     
-    my $grandfathered = Whatpm::LangTag->$method (grandfathered => 'i-ami');
+    my $grandfathered = Web::LangTag->new->$method (grandfathered => 'i-ami');
     ok $grandfathered->{_deprecated};
     is $grandfathered->{_preferred}, 'ami';
     
-    my $redundant = Whatpm::LangTag->$method (redundant => 'zh-yue');
+    my $redundant = Web::LangTag->new->$method (redundant => 'zh-yue');
     ok $redundant->{_deprecated};
     is $redundant->{_preferred}, 'yue';
   }
@@ -438,6 +445,6 @@ sub _tag_registry_data : Test(60) {
 
 __PACKAGE__->runtests;
 
-## License: Public Domain.
-
 1;
+
+## License: Public Domain.

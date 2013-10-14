@@ -1,9 +1,13 @@
-package Whatpm::LangTag;
+package Web::LangTag;
 use strict;
 use warnings;
-our $VERSION = '4.0';
+our $VERSION = '5.0';
 
-my $default_error_levels = {
+sub new ($) {
+  return bless {}, $_[0];
+} # new
+
+my $Levels = {
   langtag_fact => 'm',
   must => 'm',
   should => 's',
@@ -13,9 +17,23 @@ my $default_error_levels = {
   info => 'i',
 };
 
+sub onerror ($;$) {
+  if (@_ > 1) {
+    $_[0]->{onerror} = $_[1];
+  }
+  return $_[0]->{onerror} ||= sub {
+    my %args = @_;
+    warn sprintf "%s: %s%s (%s)\n",
+        $args{value},
+        $args{type},
+        (defined $args{text} ? ' ' . $args{text} : ''),
+        $args{level};
+  };
+} # onerror
+
 ## Versioning flags
-our $RFC5646;
-our $RFC1766;
+# $self->{RFC5646}
+# $self->{RFC1766}
 
 my $Grandfathered5646 = {map { $_ => 1 } qw(
   en-gb-oed i-ami i-bnn i-default i-enochian i-hak i-klingon i-lux
@@ -28,8 +46,8 @@ my $Grandfathered5646 = {map { $_ => 1 } qw(
 
 *parse_tag = \&parse_rfc5646_tag;
 
-sub parse_rfc5646_tag ($$;$$) {
-  local $RFC5646 = 1;
+sub parse_rfc5646_tag ($$) {
+  local $_[0]->{RFC5646} = 1;
   return shift->parse_rfc4646_tag (@_);
 } # parse_rfc5646_tag
 
@@ -38,10 +56,8 @@ sub parse_rfc5646_tag ($$;$$) {
 
 ## NOTE: This method, with appropriate $onerror handler, is a
 ## "well-formed" processor [RFC 4646].
-sub parse_rfc4646_tag ($$;$$) {
-  my $tag = $_[1];
-  my $onerror = $_[2] || sub { };
-  my $levels = $_[3] || $default_error_levels;
+sub parse_rfc4646_tag ($$) {
+  my ($self, $tag) = @_;
 
   my @tag = split /-/, $tag, -1;
 
@@ -57,7 +73,7 @@ sub parse_rfc4646_tag ($$;$$) {
   my $tag_l = $tag;
   $tag_l =~ tr/A-Z/a-z/;
 
-  if ($RFC5646 and $Grandfathered5646->{$tag_l}) {
+  if ($self->{RFC5646} and $Grandfathered5646->{$tag_l}) {
     return {
       extlang => [],
       variant => [],
@@ -68,7 +84,7 @@ sub parse_rfc4646_tag ($$;$$) {
     };
   }
 
-  my $grandfathered = !$RFC5646 && $tag =~ /\A[A-Za-z]{1,3}(?>-[A-Za-z0-9]{2,8}){1,2}\z/;
+  my $grandfathered = !$self->{RFC5646} && $tag =~ /\A[A-Za-z]{1,3}(?>-[A-Za-z0-9]{2,8}){1,2}\z/;
 
   if ($r{language} and $r{language} =~ /\A[A-Za-z]+\z/) {
     if (length $r{language} == 1) {
@@ -87,9 +103,9 @@ sub parse_rfc4646_tag ($$;$$) {
           ## (RFC 4646 4.4. 1.), "Private ues subtags, like other
           ## subtags, MUST conform to the format and content
           ## cnstraints in the ABNF." (RFC 4646 4.5.)
-          $onerror->(type => 'langtag:language:syntax',
+          $self->onerror->(type => 'langtag:language:syntax',
                      value => $r{language},
-                     level => $levels->{must});
+                     level => $Levels->{must});
         }
       }
     } elsif (length $r{language} <= 3) {
@@ -104,9 +120,9 @@ sub parse_rfc4646_tag ($$;$$) {
       ## canonical, it has to be well-formed (RFC 4646 4.4. 1.)
       ## "Private ues subtags, like other subtags, MUST conform to the
       ## format and content cnstraints in the ABNF." (RFC 4646 4.5.)
-      $onerror->(type => 'langtag:language:syntax',
+      $self->onerror->(type => 'langtag:language:syntax',
                  value => $r{language},
-                 level => $levels->{must});
+                 level => $Levels->{must});
     }
   } else {
     ## NOTE: Well-formed processor MUST check whether a tag conforms
@@ -114,9 +130,9 @@ sub parse_rfc4646_tag ($$;$$) {
     ## canonical, it has to be well-formed (RFC 4646 4.4. 1.),
     ## "Private ues subtags, like other subtags, MUST conform to the
     ## format and content cnstraints in the ABNF." (RFC 4646 4.5.)
-    $onerror->(type => 'langtag:language:syntax',
+    $self->onerror->(type => 'langtag:language:syntax',
                value => $r{language},
-               level => $levels->{must});
+               level => $Levels->{must});
   }
 
   if (defined $r{language}) {
@@ -144,9 +160,9 @@ sub parse_rfc4646_tag ($$;$$) {
         ## and MUST and MUST NOT (RFC 4646 2.2.6. 4.), , SHOULD be
         ## canonical and to be canonical, it has to be well-formed
         ## (RFC 4646 4.4. 1.)
-        $onerror->(type => 'langtag:extension:duplication',
+        $self->onerror->(type => 'langtag:extension:duplication',
                    value => $tag[0],
-                   level => $levels->{must});
+                   level => $Levels->{must});
       }
       my $ext = [shift @tag => shift @tag];
       while (@tag and $tag[0] =~ /\A[A-Za-z0-9]{2,8}\z/) {
@@ -165,9 +181,9 @@ sub parse_rfc4646_tag ($$;$$) {
             $key = $ext->[$i];
             $key =~ tr/A-Z/a-z/;
             if ($has_key{$key}) {
-              $onerror->(type => 'langtag:extension:u:key:duplication',
+              $self->onerror->(type => 'langtag:extension:u:key:duplication',
                          value => $key,
-                         level => $levels->{must}); ## RFC 6067
+                         level => $Levels->{must}); ## RFC 6067
             }
             $has_key{$key}++;
             push @{$r{u}}, [$ext->[$i]];
@@ -176,9 +192,9 @@ sub parse_rfc4646_tag ($$;$$) {
               my $attr = $ext->[$i];
               $attr =~ tr/A-Z/a-z/;
               if ($has_attribute{$attr}) {
-                $onerror->(type => 'langtag:extension:u:attr:duplication',
+                $self->onerror->(type => 'langtag:extension:u:attr:duplication',
                            value => $attr,
-                           level => $levels->{langtag_fact}); ## RFC 6067
+                           level => $Levels->{langtag_fact}); ## RFC 6067
               }
               $has_attribute{$attr}++;
             }
@@ -197,9 +213,9 @@ sub parse_rfc4646_tag ($$;$$) {
         ## "Private ues subtags, like other subtags, MUST conform to
         ## the format and content cnstraints in the ABNF." (RFC 4646
         ## 4.5.)
-        $onerror->(type => 'langtag:privateuse:syntax',
+        $self->onerror->(type => 'langtag:privateuse:syntax',
                    value => $_,
-                   level => $levels->{must});
+                   level => $Levels->{must});
       }
     }
     @{$r{privateuse}} = @tag;
@@ -252,9 +268,9 @@ sub parse_rfc4646_tag ($$;$$) {
       ## "Private ues subtags, like other subtags, MUST conform to the
       ## format and content cnstraints in the ABNF." (RFC 4646 4.5.)
       for (@tag) {
-        $onerror->(type => 'langtag:illegal',
+        $self->onerror->(type => 'langtag:illegal',
                    value => $_,
-                   level => $levels->{must});
+                   level => $Levels->{must});
       }
       push @{$r{illegal}}, @tag;
     }
@@ -284,20 +300,19 @@ sub serialize_parsed_tag ($$) {
 
 *check_parsed_tag = \&check_rfc5646_parsed_tag;
 
-sub check_rfc5646_parsed_tag ($$$;$%) {
-  local $RFC5646 = 1;
+sub check_rfc5646_parsed_tag ($$) {
+  local $_[0]->{RFC5646} = 1;
   return shift->check_rfc4646_parsed_tag (@_);
 } # check_rfc5646_parsed_tag
 
 # Compat
 *check_rfc4646_langtag = \&check_rfc4646_parsed_tag;
 
-## NOTE: This method, with appropriate $onerror handler, is intended
+## NOTE: This method, with appropriate $self->onerror handler, is intended
 ## to be a "validating" processor of language tags, as defined in RFC
 ## 4646, if an output of the |parse_rfc4646_tag| method is inputed.
-sub check_rfc4646_parsed_tag ($$$;$) {
-  my (undef, $tag_o, $onerror, $levels) = @_;
-  $levels ||= $default_error_levels;
+sub check_rfc4646_parsed_tag ($$) {
+  my ($self, $tag_o) = @_;
 
   my $result = {well_formed => !@{$tag_o->{illegal}}, valid => 1};
   if (defined $tag_o->{language}) {
@@ -308,13 +323,11 @@ sub check_rfc4646_parsed_tag ($$$;$) {
       if grep { not /\A[A-Za-z0-9]{1,8}\z/ } @{$tag_o->{privateuse}};
   delete $result->{valid} unless $result->{well_formed};
 
-  require Whatpm::_LangTagReg;
+  require Web::LangTag::_List;
   our $Registry;
 
   my $tag_s = $tag_o->{grandfathered};
-  unless (defined $tag_s) {
-    $tag_s = Whatpm::LangTag->serialize_parsed_tag ($tag_o);
-  }
+  $tag_s = $self->serialize_parsed_tag ($tag_o) unless defined $tag_s;
   my $tag_s_orig = $tag_s;
   $tag_s =~ tr/A-Z/a-z/;
 
@@ -335,9 +348,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
       #
     } else {
       ## NOTE: RECOMMENDED (RFC 4646 2.1.)
-      $onerror->(type => 'langtag:'.$type.':case',
+      $self->onerror->(type => 'langtag:'.$type.':case',
                  value => $actual,
-                 level => $levels->{should});
+                 level => $Levels->{should});
     }
   }; # $check_case
 
@@ -361,16 +374,16 @@ sub check_rfc4646_parsed_tag ($$$;$) {
       ## grandfathered tag MUST use Preferred-Value (RFC 4646
       ## 4.4. 3.), and to be canonical other subtags MUST be canonical
       ## (RFC 4646 4.4. 4.).
-      $onerror->(type => 'langtag:'.$type.':deprecated',
+      $self->onerror->(type => 'langtag:'.$type.':deprecated',
                  text => $def->{_preferred}, # might be undef
                  value => $actual,
-                 level => $levels->{should});
-    } elsif ($RFC5646 and $def->{_preferred}) {
+                 level => $Levels->{should});
+    } elsif ($self->{RFC5646} and $def->{_preferred}) {
       ## RFC 5646 2.2.2.
-      $onerror->(type => 'langtag:'.$type.':preferred',
+      $self->onerror->(type => 'langtag:'.$type.':preferred',
                  text => $def->{_preferred},
                  value => $actual,
-                 level => $levels->{should});
+                 level => $Levels->{should});
     }
   }; # $check_deprecated
                         
@@ -387,11 +400,11 @@ sub check_rfc4646_parsed_tag ($$$;$) {
     $check_deprecated->('grandfathered', $tag_s_orig,
                         $Registry->{grandfathered}->{$tag_s});
 
-    if ($RFC5646 and $tag_s eq 'i-default') {
+    if ($self->{RFC5646} and $tag_s eq 'i-default') {
       ## RFC 5646 4.1.
-      $onerror->(type => 'langtag:grandfathered:i-default',
+      $self->onerror->(type => 'langtag:grandfathered:i-default',
                  value => $tag_o->{grandfathered},
-                 level => $levels->{should});
+                 level => $Levels->{should});
     }
   } elsif (defined $tag_o->{grandfathered}) {
     ## NOTE: The language tag does conform to the |grandfathered|
@@ -400,9 +413,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
     ## RFC 4646.
 
     ## NOTE: RFC 4646 2.9. ("validating" processor MUST check)
-    $onerror->(type => 'langtag:grandfathered:invalid',
+    $self->onerror->(type => 'langtag:grandfathered:invalid',
                value => $tag_o->{grandfathered},
-               level => $levels->{langtag_fact});
+               level => $Levels->{langtag_fact});
     delete $result->{valid};
   } else {
     ## NOTE: We ignore illegal subtags for the purpose of validation
@@ -440,22 +453,22 @@ sub check_rfc4646_parsed_tag ($$$;$) {
                               $Registry->{language}->{$lang});
 
           if ($lang =~ /\Aq[a-t][a-z]\z/) {
-            $onerror->(type => 'langtag:language:private',
+            $self->onerror->(type => 'langtag:language:private',
                        value => $tag_o->{language},
-                       level => $levels->{warn});
+                       level => $Levels->{warn});
           } elsif ($lang eq 'und') {
             ## NOTE: SHOULD NOT (RFC 4646 4.1. 4.)
-            $onerror->(type => 'langtag:language:und',
-                       level => $levels->{should});
+            $self->onerror->(type => 'langtag:language:und',
+                       level => $Levels->{should});
           } elsif ($lang eq 'mul') {
             ## NOTE: SHOULD NOT (RFC 4646 4.1. 5.)
-            $onerror->(type => 'langtag:language:mul',
-                       level => $levels->{should});
+            $self->onerror->(type => 'langtag:language:mul',
+                       level => $Levels->{should});
           } elsif ($lang eq 'mis') {
             ## NOTE: SHOULD NOT (RFC 5646 4.1.)
-            $onerror->(type => 'langtag:language:mis',
-                       level => $levels->{should})
-                if $RFC5646;
+            $self->onerror->(type => 'langtag:language:mis',
+                       level => $Levels->{should})
+                if $self->{RFC5646};
           }
         } else {
           ## NOTE: RFC 4646 2.9. ("validating" processor MUST check)
@@ -463,9 +476,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           ## subtag[s]" and what is that is unclear.  From the context,
           ## we assume that it referes to primary and extended language
           ## subtags.
-          $onerror->(type => 'langtag:language:invalid',
+          $self->onerror->(type => 'langtag:language:invalid',
                      value => $tag_o->{language},
-                     level => $RFC5646 ? $levels->{must} : $levels->{langtag_fact});
+                     level => $self->{RFC5646} ? $Levels->{must} : $Levels->{langtag_fact});
           delete $result->{valid};
         }
       } else {
@@ -480,11 +493,11 @@ sub check_rfc4646_parsed_tag ($$$;$) {
       
       my $i_extlang = 0;
       for my $extlang_orig (@{$tag_o->{extlang}}) {
-        if ($RFC5646 and $i_extlang) {
+        if ($self->{RFC5646} and $i_extlang) {
           ## RFC 5646 2.2.2.
-          $onerror->(type => 'langtag:extlang:invalid',
+          $self->onerror->(type => 'langtag:extlang:invalid',
                      value => $extlang_orig,
-                     level => $levels->{must});
+                     level => $Levels->{must});
           delete $result->{valid};
           next;
         }
@@ -503,10 +516,10 @@ sub check_rfc4646_parsed_tag ($$$;$) {
               ## NOTE: RFC 4646 2.2.2. (MUST), RFC 4646
               ## 2.9. ("validating" processor MUST check), RFC 4646
               ## 4.1. (SHOULD)
-              $onerror->(type => 'langtag:extlang:prefix',
+              $self->onerror->(type => 'langtag:extlang:prefix',
                          value => $extlang,
-                         level => $levels->{must});
-              delete $result->{valid} unless $RFC5646;
+                         level => $Levels->{must});
+              delete $result->{valid} unless $self->{RFC5646};
             }
           }
 
@@ -520,10 +533,10 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           ## subtag[s]" and what is that is unclear.  From the context,
           ## we assume that it referes to primary and extended language
           ## subtags.
-          $onerror->(type => 'langtag:extlang:invalid',
+          $self->onerror->(type => 'langtag:extlang:invalid',
                      value => $extlang_orig,
-                     level => $RFC5646
-                         ? $levels->{must} : $levels->{langtag_fact});
+                     level => $self->{RFC5646}
+                         ? $Levels->{must} : $Levels->{langtag_fact});
           delete $result->{valid};
         }
         $i_extlang++;
@@ -550,22 +563,22 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           if ($Registry->{language}->{$lang} and
               defined $Registry->{language}->{$lang}->{_suppress} and
               $Registry->{language}->{$lang}->{_suppress} eq $script) {
-            $onerror->(type => 'langtag:script:suppress',
+            $self->onerror->(type => 'langtag:script:suppress',
                        text => $lang,
                        value => $tag_o->{script},
-                       level => $levels->{should});
+                       level => $Levels->{should});
           }
 
           if ($script =~ /\Aqa(?>a[a-z]|b[a-x])\z/) {
-            $onerror->(type => 'langtag:script:private',
+            $self->onerror->(type => 'langtag:script:private',
                        value => $tag_o->{script},
-                       level => $levels->{warn});
+                       level => $Levels->{warn});
           }
         } else {
           ## NOTE: RFC 4646 2.9. ("validating" processor MUST check)
-          $onerror->(type => 'langtag:script:invalid',
+          $self->onerror->(type => 'langtag:script:invalid',
                      value => $tag_o->{script},
-                     level => $RFC5646 ? $levels->{must} : $levels->{langtag_fact});
+                     level => $self->{RFC5646} ? $Levels->{must} : $Levels->{langtag_fact});
           delete $result->{valid};
         }
       }
@@ -582,9 +595,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
                               $Registry->{region}->{$region});
 
           if ($region =~ /\A(?>aa|q[m-z]|x[a-z]|zz)\z/) {
-            $onerror->(type => 'langtag:region:private',
+            $self->onerror->(type => 'langtag:region:private',
                        value => $tag_o->{region},
-                       level => $levels->{warn});
+                       level => $Levels->{warn});
           }
         } else {
           ## NOTE: RFC 4646 2.2.4. 3. B. "UN numeric codes for
@@ -597,9 +610,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           ## 2.2.4. 4. Note "Alphanumeric codes in Appendix X ... MUST
           ## NOT be used", RFC 4646 2.9. ("validating" processor MUST
           ## check)
-          $onerror->(type => 'langtag:region:invalid',
+          $self->onerror->(type => 'langtag:region:invalid',
                      value => $tag_o->{region},
-                     level => $RFC5646 ? $levels->{must} : $levels->{langtag_fact});
+                     level => $self->{RFC5646} ? $Levels->{must} : $Levels->{langtag_fact});
           delete $result->{valid};
         }
       }
@@ -616,11 +629,11 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           my $prefixes = $Registry->{variant}->{$variant}->{Prefix} || [];
           my @longer_prefix;
           if (@$prefixes) {
-            if ($RFC5646 and defined $last_unprefixed_variant) {
-              $onerror->(type => 'langtag:variant:order',
+            if ($self->{RFC5646} and defined $last_unprefixed_variant) {
+              $self->onerror->(type => 'langtag:variant:order',
                          text => $variant,
                          value => $last_unprefixed_variant,
-                         level => $levels->{should});
+                         level => $Levels->{should});
             }
 
             HAS_PREFIX: {
@@ -634,7 +647,7 @@ sub check_rfc4646_parsed_tag ($$$;$) {
                   $tag_o->{region},
                   @prev_variant;
               for my $prefix_s (@$prefixes) {
-                if (Whatpm::LangTag->extended_filtering_rfc4647_range
+                if ($self->extended_filtering_rfc4647_range
                         ($prefix_s, $tag)) {
                   last HAS_PREFIX;
                 } else {
@@ -644,13 +657,13 @@ sub check_rfc4646_parsed_tag ($$$;$) {
               
               ## NOTE: RFC 4646 2.9. ("validating" processor MUST
               ## check) and RFC 4646 4.1. (SHOULD)
-              $onerror->(type => 'langtag:variant:prefix',
+              $self->onerror->(type => 'langtag:variant:prefix',
                          text => (join '|', @$prefixes),
                          value => $variant,
-                         level => $levels->{should});
-              delete $result->{valid} unless $RFC5646;
+                         level => $Levels->{should});
+              delete $result->{valid} unless $self->{RFC5646};
             } # HAS_PREFIX
-            if ($RFC5646 and @longer_prefix and @longer_prefix != @$prefixes) {
+            if ($self->{RFC5646} and @longer_prefix and @longer_prefix != @$prefixes) {
               my $tag = join '-', grep { defined $_ }
                     $tag_o->{language},
                     @{$tag_o->{extlang} or []},
@@ -659,23 +672,23 @@ sub check_rfc4646_parsed_tag ($$$;$) {
                     @{$tag_o->{variant} or []};
               for my $prefix_s (@longer_prefix) {
                 ## RFC 5646 4.1. Variant subtag ordering requirement
-                if (Whatpm::LangTag->extended_filtering_rfc4647_range
+                if ($self->extended_filtering_rfc4647_range
                         ($prefix_s, $tag)) {
-                  $onerror->(type => 'langtag:variant:order',
+                  $self->onerror->(type => 'langtag:variant:order',
                              text => $prefix_s,
                              value => $variant,
-                             level => $levels->{should});
+                             level => $Levels->{should});
                 }
               }
             }
           } else { # @$prefixes
             ## RFC 5646 4.1. Variant subtag ordering requirement
-            if ($RFC5646 and defined $last_unprefixed_variant) {
+            if ($self->{RFC5646} and defined $last_unprefixed_variant) {
               if (($variant cmp $last_unprefixed_variant) < 0) {
-                $onerror->(type => 'langtag:variant:order',
+                $self->onerror->(type => 'langtag:variant:order',
                            text => $variant,
                            value => $last_unprefixed_variant,
-                           level => $levels->{should});
+                           level => $Levels->{should});
               }
             }
             $last_unprefixed_variant = $variant;
@@ -689,26 +702,26 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           if ($prev_variant{$variant}) {
             ## A variant subtag SHOULD only be used at most once in a
             ## tag (RFC 4646 4.1. 6.)
-            $onerror->(type => 'langtag:variant:duplication',
+            $self->onerror->(type => 'langtag:variant:duplication',
                        value => $variant_orig,
-                       level => $levels->{should});
+                       level => $Levels->{should});
             delete $result->{valid};
           } elsif (($variant eq '1996' and $prev_variant{1901}) or
                    ($variant eq '1901' and $prev_variant{1996})) {
             ## RFC 4646 2.2.5. shows '1996' and '1901' as a bad
             ## example and says that they SHOULD NOT be used together.
-            $onerror->(type => 'langtag:variant:combination',
+            $self->onerror->(type => 'langtag:variant:combination',
                        text => $variant_orig,
                        value => $variant eq '1901' ? '1996' : '1901',
-                       level => $levels->{should});
+                       level => $Levels->{should});
           }
         } else {
           ## NOTE: RFC 4646 2.9. ("validating" processor MUST check)
-          $onerror->(type => 'langtag:variant:invalid',
+          $self->onerror->(type => 'langtag:variant:invalid',
                      value => $variant_orig,
-                     level => $RFC5646
-                                  ? $levels->{must}
-                                  : $levels->{langtag_fact});
+                     level => $self->{RFC5646}
+                                  ? $Levels->{must}
+                                  : $Levels->{langtag_fact});
           delete $result->{valid};
         }
         push @prev_variant, $variant_orig;
@@ -720,9 +733,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
       for my $ext (@{$tag_o->{extension}}) {
         my $ext_type = $ext->[0];
         $ext_type =~ tr/A-Z/a-z/;
-        $onerror->(type => 'langtag:extension:unknown',
+        $self->onerror->(type => 'langtag:extension:unknown',
                    value => (join '-', @{$ext}),
-                   level => $levels->{langtag_fact})
+                   level => $Levels->{langtag_fact})
             unless $ext_type eq 'u';
         
         ## NOTE: "When a language tag is to be used in a specific,
@@ -745,13 +758,13 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           ## language tag SHOULD be canonicalized, and to be canonical
           ## extension tags SHOULD be ordered in ASCII order (RFC 4646
           ## 4.4. 5.).
-          $onerror->(type => 'langtag:extension:order',
+          $self->onerror->(type => 'langtag:extension:order',
                      text => chr $max_ext, # $max_ext != 0x00
                      value => $ext->[0],
-                     level => $levels->{should});
+                     level => $Levels->{should});
         } else {
           if ($has_ext{$ext_type}) {
-            delete $result->{well_formed} unless $RFC5646;
+            delete $result->{well_formed} unless $self->{RFC5646};
             delete $result->{valid};
           }
           $max_ext = ord $ext_type;
@@ -765,9 +778,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           ## The "u" extension (UTS #35 and RFC 6067)
           for (@{$ext}[1..$#$ext]) {
             if (/[A-Z]/) {
-              $onerror->(type => 'langtag:extension:u:case',
+              $self->onerror->(type => 'langtag:extension:u:case',
                          value => $_,
-                         level => $levels->{warn}); # Canonical form
+                         level => $Levels->{warn}); # Canonical form
             }
           }
         }
@@ -780,18 +793,18 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           my $attr = $tag_o->{u}->[0]->[$_];
           $attr =~ tr/A-Z/a-z/;
           if (($prev cmp $attr) > 0) {
-            $onerror->(type => 'langtag:extension:u:attr:order',
+            $self->onerror->(type => 'langtag:extension:u:attr:order',
                        text => $prev,
                        value => $attr,
-                       level => $levels->{warn}); # Canonical form
+                       level => $Levels->{warn}); # Canonical form
           }
           $prev = $attr;
 
           ## At the moment attribute is not used at all.
-          $onerror->(type => 'langtag:extension:u:attr:invalid',
+          $self->onerror->(type => 'langtag:extension:u:attr:invalid',
                      value => $attr,
-                     level => $levels->{langtag_fact});
-          delete $result->{valid} unless $RFC5646;
+                     level => $Levels->{langtag_fact});
+          delete $result->{valid} unless $self->{RFC5646};
         }
 
         $prev = '';
@@ -800,40 +813,40 @@ sub check_rfc4646_parsed_tag ($$$;$) {
           my $key = $keyword->[0];
           $key =~ tr/A-Z/a-z/;
           if (($prev cmp $key) > 0) {
-            $onerror->(type => 'langtag:extension:u:key:order',
+            $self->onerror->(type => 'langtag:extension:u:key:order',
                        text => $prev,
                        value => $key,
-                       level => $levels->{warn}); # Canonical form
+                       level => $Levels->{warn}); # Canonical form
           }
           $prev = $key;
 
           if ($key eq 'vt') {
             ## UTS #35 Appendix Q.
             if (not defined $keyword->[1]) {
-              $onerror->(type => 'langtag:extension:u:type:missing',
+              $self->onerror->(type => 'langtag:extension:u:type:missing',
                          text => 'vt',
-                         level => $levels->{langtag_fact});
-              delete $result->{valid} unless $RFC5646;
+                         level => $Levels->{langtag_fact});
+              delete $result->{valid} unless $self->{RFC5646};
             }
 
             for (@$keyword[1, 2]) {
               next unless defined;
               if (not /\A[0-9A-Fa-f]{4,6}\z/ or
                   0x10FFFF < hex) {
-                $onerror->(type => 'langtag:extension:u:type:invalid',
+                $self->onerror->(type => 'langtag:extension:u:type:invalid',
                            text => 'vt',
                            value => $_,
-                           level => $levels->{langtag_fact}); # may
-                delete $result->{valid} unless $RFC5646;
+                           level => $Levels->{langtag_fact}); # may
+                delete $result->{valid} unless $self->{RFC5646};
               }
             }
 
             for (@$keyword[3..$#$keyword]) {
-              $onerror->(type => 'langtag:extension:u:type:nosemantics',
+              $self->onerror->(type => 'langtag:extension:u:type:nosemantics',
                          text => 'vt',
                          value => $_,
-                         level => $levels->{langtag_fact});
-              delete $result->{valid} unless $RFC5646;
+                         level => $Levels->{langtag_fact});
+              delete $result->{valid} unless $self->{RFC5646};
             }
           } elsif ($Registry->{u_key}->{$key}) {
             my $type = $keyword->[1];
@@ -843,32 +856,32 @@ sub check_rfc4646_parsed_tag ($$$;$) {
                 #
               } else {
                 ## Semantics is not defined anywhere
-                $onerror->(type => 'langtag:extension:u:type:missing',
+                $self->onerror->(type => 'langtag:extension:u:type:missing',
                            text => $key,
-                           level => $levels->{langtag_fact});
-                delete $result->{valid} unless $RFC5646;
+                           level => $Levels->{langtag_fact});
+                delete $result->{valid} unless $self->{RFC5646};
               }
             } elsif ($Registry->{'u_' . $key}->{$type}) {
               for (@{$keyword}[2..$#$keyword]) {
                 ## Semantics is not defined anywhere
-                $onerror->(type => 'langtag:extension:u:type:nosemantics',
+                $self->onerror->(type => 'langtag:extension:u:type:nosemantics',
                            text => $key,
                            value => $_,
-                           level => $levels->{langtag_fact});
-                delete $result->{valid} unless $RFC5646;
+                           level => $Levels->{langtag_fact});
+                delete $result->{valid} unless $self->{RFC5646};
               }
             } else {
-              $onerror->(type => 'langtag:extension:u:type:invalid',
+              $self->onerror->(type => 'langtag:extension:u:type:invalid',
                          text => $key,
                          value => $type,
-                         level => $levels->{langtag_fact});
-              delete $result->{valid} unless $RFC5646;
+                         level => $Levels->{langtag_fact});
+              delete $result->{valid} unless $self->{RFC5646};
             }
           } else {
-            $onerror->(type => 'langtag:extension:u:key:invalid',
+            $self->onerror->(type => 'langtag:extension:u:key:invalid',
                        value => $key,
-                       level => $levels->{langtag_fact});
-            delete $result->{valid} unless $RFC5646;
+                       level => $Levels->{langtag_fact});
+            delete $result->{valid} unless $self->{RFC5646};
           }
         }
 
@@ -886,9 +899,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
         ## "well-known" private use tag list).  However, the latter
         ## condition should in most case be met (except for internal
         ## uses).
-        $onerror->(type => 'langtag:privateuse',
+        $self->onerror->(type => 'langtag:privateuse',
                    value => (join '-', @{$tag_o->{privateuse}}),
-                   level => $levels->{should});
+                   level => $Levels->{should});
 
         for (@{$tag_o->{privateuse}}) {
           if (/\A[^A-Z]\z/ or
@@ -899,9 +912,9 @@ sub check_rfc4646_parsed_tag ($$$;$) {
             #
           } else {
             ## NOTE: RECOMMENDED (RFC 4646 2.1.)
-            $onerror->(type => 'langtag:privateuse:case',
+            $self->onerror->(type => 'langtag:privateuse:case',
                        value => $_,
-                       level => $levels->{should});
+                       level => $Levels->{should});
           }
         }
       }
@@ -917,54 +930,52 @@ sub check_rfc4646_parsed_tag ($$$;$) {
 # Compat
 *check_rfc3066_language_tag = \&check_rfc3066_tag;
 
-sub check_rfc3066_tag ($$;$$) {
-  my $tag = $_[1];
-  my $onerror = $_[2] || sub { };
-  my $levels = $_[3] || $default_error_levels;
+sub check_rfc3066_tag ($$) {
+  my ($self, $tag) = @_;
   
   my @tag = split /-/, $tag, -1;
 
-  require Whatpm::_LangTagReg;
+  require Web::LangTag::_List;
   our $Registry;
 
-  if (not $RFC1766 and $tag[0] =~ /\A[0-9]+\z/) {
-    $onerror->(type => 'langtag:illegal',
+  if (not $self->{RFC1766} and $tag[0] =~ /\A[0-9]+\z/) {
+    $self->onerror->(type => 'langtag:illegal',
                value => $tag[0],
-               level => $levels->{langtag_fact});
+               level => $Levels->{langtag_fact});
   }
 
   for (@tag) {
     unless (/\A[A-Za-z0-9]{1,8}\z/) {
-      $onerror->(type => 'langtag:illegal',
+      $self->onerror->(type => 'langtag:illegal',
                  value => $_,
-                 level => $levels->{langtag_fact});
-    } elsif ($RFC1766 and /[0-9]/) {
-      $onerror->(type => 'langtag:illegal',
+                 level => $Levels->{langtag_fact});
+    } elsif ($self->{RFC1766} and /[0-9]/) {
+      $self->onerror->(type => 'langtag:illegal',
                  value => $_,
-                 level => $levels->{langtag_fact});
+                 level => $Levels->{langtag_fact});
     }
   }
 
   if ($tag[0] =~ /\A[A-Za-z]{2}\z/) {
     if ($tag[0] =~ /[A-Z]/) {
-      $onerror->(type => 'langtag:language:case',
+      $self->onerror->(type => 'langtag:language:case',
                  value => $tag[0],
-                 level => $levels->{good});
+                 level => $Levels->{good});
     }
 
     my $lang = $tag[0];
     $lang =~ tr/A-Z/a-z/;
     unless ($Registry->{language}->{$lang}) {
       ## ISO 639-1 language tag
-      $onerror->(type => 'langtag:language:invalid',
+      $self->onerror->(type => 'langtag:language:invalid',
                  value => $tag[0],
-                 level => $levels->{langtag_fact});
+                 level => $Levels->{langtag_fact});
     }
-  } elsif (not $RFC1766 and $tag[0] =~ /\A[A-Za-z]{3}\z/) {
+  } elsif (not $self->{RFC1766} and $tag[0] =~ /\A[A-Za-z]{3}\z/) {
     if ($tag[0] =~ /[A-Z]/) {
-      $onerror->(type => 'langtag:language:case',
+      $self->onerror->(type => 'langtag:language:case',
                  value => $tag[0],
-                 level => $levels->{good}); # Recommendation of source stds
+                 level => $Levels->{good}); # Recommendation of source stds
     }
 
     my $lang = $tag[0];
@@ -973,61 +984,62 @@ sub check_rfc3066_tag ($$;$$) {
       ## - ISO 639-2 language tag (fact)
       ## - Prefer 2-letter code, if any (MUST)
       ## - Prefer /T code to /B code, if any (MUST)
-      $onerror->(type => 'langtag:language:invalid',
+      $self->onerror->(type => 'langtag:language:invalid',
                  value => $tag[0],
-                 level => $levels->{langtag_fact});
+                 level => $Levels->{langtag_fact});
     } elsif ($lang eq 'und') {
-      $onerror->(type => 'langtag:language:und',
-                 level => $levels->{should});
+      $self->onerror->(type => 'langtag:language:und',
+                 level => $Levels->{should});
     } elsif ($lang eq 'mul') {
-      $onerror->(type => 'langtag:language:mul',
-                 level => $levels->{should});
+      $self->onerror->(type => 'langtag:language:mul',
+                 level => $Levels->{should});
     } elsif ($lang =~ /\Aq[a-t][a-z]\z/) {
-      $onerror->(type => 'langtag:language:private',
+      $self->onerror->(type => 'langtag:language:private',
                  value => $tag[0],
-                 level => $levels->{warn});
+                 level => $Levels->{warn});
     }
   } elsif ($tag[0] =~ /\A[Ii]\z/) {
     #
   } elsif ($tag[0] =~ /\A[Xx]\z/) {
-    $onerror->(type => 'langtag:private',
+    $self->onerror->(type => 'langtag:private',
                value => $tag,
-               level => $levels->{good});
+               level => $Levels->{good});
   } else {
-    $onerror->(type => 'langtag:language:nosemantics',
+    $self->onerror->(type => 'langtag:language:nosemantics',
                value => $tag[0],
-               level => $levels->{langtag_fact});
+               level => $Levels->{langtag_fact});
   }
 
   if (@tag >= 2 and
-      ## This is a willful violation to RFC 1766/3066 - This
-      ## interpretation is maybe the real intention of these specs.
+      ## This is a willful violation to RFC 1766/3066, although it
+      ## seems that the actual intention of these specifications is
+      ## how it is implemented here:
       $tag[0] !~ /\A[IiXx]\z/) {
     if ($tag[1] =~ /\A[0-9A-Za-z]{2}\z/) {
       if ($tag[1] =~ /[a-z]/) {
-        $onerror->(type => 'langtag:region:case',
+        $self->onerror->(type => 'langtag:region:case',
                    value => $tag[1],
-                   level => $levels->{good}); # Recommendation of source stds
+                   level => $Levels->{good}); # Recommendation of source stds
       }
       if ($tag[1] =~ /\A(?>[Aa][Aa]|[Qq][M-Zm-z]|[Xx][A-Za-z]|[Zz][Zz])\z/) {
-        $onerror->(type => 'langtag:region:private',
+        $self->onerror->(type => 'langtag:region:private',
                    value => $tag[1],
-                   level => $RFC1766
-                       ? $levels->{warn} : $levels->{must}); # RFC 3066 2.2.
+                   level => $self->{RFC1766}
+                       ? $Levels->{warn} : $Levels->{must}); # RFC 3066 2.2.
       } elsif ($tag[1] =~ /\A([A-Za-z]{2})\z/) {
         my $region = $1;
         $region =~ tr/A-Z/a-z/;
         unless ($Registry->{region}->{$region}) {
           ## ISO 3166 country code (fact)
-          $onerror->(type => 'langtag:region:invalid',
+          $self->onerror->(type => 'langtag:region:invalid',
                      value => $tag[1],
-                     level => $levels->{langtag_fact});
+                     level => $Levels->{langtag_fact});
         }
       }
     } elsif (length $tag[1] == 1) {
-      $onerror->(type => 'langtag:region:nosemantics', 
+      $self->onerror->(type => 'langtag:region:nosemantics', 
                  value => $tag[1],
-                 level => $levels->{langtag_fact});
+                 level => $Levels->{langtag_fact});
     }
   }
 
@@ -1042,29 +1054,30 @@ sub check_rfc3066_tag ($$;$$) {
         $Registry->{redundant}->{$tag_l};
     if ($def) {
       if ($def->{_deprecated}) {
-        my $level = $levels->{warn};
+        my $level = $Levels->{warn};
         ## MUST use ISO tag rather than i-* tag (RFC 3066 2.3)
-        $level = $levels->{must}
-            if not $RFC1766 and
+        $level = $Levels->{must}
+            if not $self->{RFC1766} and
                $tag_l =~ /^i-/ and
                $def->{_preferred} and
                $def->{_preferred} =~ /^[A-Za-z]{2,3}$/;
-        $onerror->(type => 'langtag:deprecated',
+        $self->onerror->(type => 'langtag:deprecated',
                    text => $def->{_preferred}, # or undef
                    value => $tag,
                    level => $level);
       }
     } else {
-      $onerror->(type => 'langtag:notregistered',
+      $self->onerror->(type => 'langtag:notregistered',
                  value => $tag,
                  level => $tag_l =~ /^i-/
-                     ? $levels->{langtag_fact} : $levels->{warn});
+                     ? $Levels->{langtag_fact} : $Levels->{warn});
     }
   }
+  return {};
 } # check_rfc3066_tag
 
-sub check_rfc1766_tag ($$;$$) {
-  local $RFC1766 = 1;
+sub check_rfc1766_tag ($$) {
+  local $_[0]->{RFC1766} = 1;
   return shift->check_rfc3066_tag (@_);
 } # check_rfc1766_tag
 
@@ -1093,14 +1106,13 @@ sub normalize_rfc5646_tag ($$) {
 *canonicalize_tag = \&canonicalize_rfc5646_tag;
 
 sub canonicalize_rfc5646_tag ($$) {
-  my $class = shift;
-  my $tag = shift;
+  my ($self, $tag) = @_;
   $tag = '' unless defined $tag;
 
   my $tag_l = $tag;
   $tag_l =~ tr/A-Z/a-z/;
 
-  require Whatpm::_LangTagReg;
+  require Web::LangTag::_List;
   our $Registry;
 
   my $def = $Registry->{grandfathered}->{$tag_l}
@@ -1113,7 +1125,7 @@ sub canonicalize_rfc5646_tag ($$) {
     }
   }
 
-  my $parsed_tag = $class->parse_rfc5646_tag ($tag);
+  my $parsed_tag = $self->parse_rfc5646_tag ($tag);
   return $tag unless defined $parsed_tag->{language};
 
   ## If there are more than one extlang subtags (non-conforming), the
@@ -1150,7 +1162,7 @@ sub canonicalize_rfc5646_tag ($$) {
 
   $parsed_tag->{extension} = [sort { (ord lc $a->[0]) <=> (ord lc $b->[0]) } @{$parsed_tag->{extension}}];
 
-  return Whatpm::LangTag->serialize_parsed_tag ($parsed_tag);
+  return $self->serialize_parsed_tag ($parsed_tag);
 } # canonicalize_rfc5646_tag
 
 *to_extlang_form_tag = \&to_extlang_form_rfc5646_tag;
@@ -1161,7 +1173,7 @@ sub to_extlang_form_rfc5646_tag ($$) {
     my $subtag = $1;
     $subtag =~ tr/A-Z/a-z/;
     
-    require Whatpm::_LangTagReg;
+    require Web::LangTag::_List;
     our $Registry;
     
     my $def = $Registry->{extlang}->{$subtag};
@@ -1250,23 +1262,23 @@ sub extended_filtering_rfc4647_range ($$$) {
 *tag_registry_data_rfc5646 = \&tag_registry_data_rfc4646;
 
 sub tag_registry_data_rfc4646 ($$$) {
-  my ($class, $type, $tag) = @_;
+  my (undef, $type, $tag) = @_;
   $type =~ tr/A-Z/a-z/;
   $tag =~ tr/A-Z/a-z/;
 
-  require Whatpm::_LangTagReg_Full;
+  require Web::LangTag::_ListFull;
   our $RegistryFull;
 
   return $RegistryFull->{$type} ? $RegistryFull->{$type}->{$tag} : undef;
 } # tag_registry_data_rfc4646
 
+1;
+
 =head1 LICENSE
 
-Copyright 2007-2011 Wakaba <w@suika.fam.cx>.
+Copyright 2007-2013 Wakaba <wakaba@suikawiki.org>.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-
-1;
