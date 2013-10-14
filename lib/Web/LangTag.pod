@@ -389,6 +389,18 @@ Unicode Locale Extension (‘u’) for BCP 47
 <http://cldr.unicode.org/index/bcp47-extension>,
 <http://unicode.org/repos/cldr/trunk/common/bcp47/>.
 
+=head1 DEPENDENCY
+
+The module requires Perl 5.8 or later.
+
+=head1 DEVELOPMENT
+
+Latest version of the module is available at GitHub
+<https://github.com/manakai/perl-web-langtag>.
+
+Tests are run at Travis CI:
+<https://travis-ci.org/manakai/perl-web-langtag>.
+
 =head1 SEE ALSO
 
 SuikaWiki:Language Tags
