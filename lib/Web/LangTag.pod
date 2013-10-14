@@ -127,11 +127,25 @@ If the tag contains a C<u> extension, parse result of the extension is
 contained here.  The value is an array reference of array references
 of strings.  The first inner array reference contains the attributes
 in the extension.  The remaining inner array references, if any,
-represents the keywords (i.e. the key-type pairs) in the extension in
-order.  E.g. C<[[], ['ca', 'japanese'], ['va', '0061', '0061']]> for
-input C<ja-u-ca-japanese-va-0061-0061>.
+represent the keywords (i.e. the key-type pairs) in the extension in
+original order.  E.g. C<[[], ['ca', 'japanese'], ['va', '0061',
+'0061']]> for input C<ja-u-ca-japanese-va-0061-0061>.
+
+=item t
+
+If the tag contains a C<t> extension, parse result of the extension is
+contained here.  The value is an array reference of parsed language
+tag and array references of strings.  The first (zeroth) item in the
+outer array reference is the embedded language tag, if any, or the
+C<undef> value.  The remaining items, if any, represent fields in the
+extension as array references of subtags, in original order.
+E.g. C<[{language => 'de', region => 'JP'}, ['m0', 'und'], ['x0',
+'medical']]> for input C<ja-Latn-t-de-JP-m0-und-x0-medical>.
 
 =back
+
+Note that original cases (lower- or upper-case) is preserved in the
+output.
 
 =head2 Serialization
 
@@ -243,6 +257,7 @@ if possible and sort any extension subtags.  Note that this method
 does NOT do any case folding.  In addition, the "canonicalized form"
 of a langauge tag is not necessary a fully canonicalized form at all -
 for example, variant subtags might not be in the recommended order.
+Also, it does not canonicalize extension subtags.
 
 Note that if the input is not a well-formed language tag according to
 RFC 5646, the result string might not be a well-formed language tag as
@@ -376,6 +391,9 @@ RFC 5646: Tags for Identifying Languages
 
 RFC 6067: BCP 47 Extension U <http://tools.ietf.org/html/rfc6067>.
 
+RFC 6497: BCP 47 Extension T - Transformed Content
+<http://tools.ietf.org/html/rfc6497>.
+
 IANA Language Subtag Registry
 <http://www.iana.org/assignments/language-subtag-registry>.
 
@@ -385,9 +403,11 @@ Language Tag Extensions Registry
 UTS #35: Unicode Locale Data Markup Language
 <http://unicode.org/reports/tr35/>.
 
-Unicode Locale Extension (‘u’) for BCP 47
+Unicode Locale Extensions for BCP 47
 <http://cldr.unicode.org/index/bcp47-extension>,
 <http://unicode.org/repos/cldr/trunk/common/bcp47/>.
+
+Comments in the C<lib/Web/LangTag.pm>.
 
 =head1 DEPENDENCY
 

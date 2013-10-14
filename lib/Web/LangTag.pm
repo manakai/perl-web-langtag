@@ -1,7 +1,7 @@
 package Web::LangTag;
 use strict;
 use warnings;
-our $VERSION = '5.0';
+our $VERSION = '6.0';
 
 sub new ($) {
   return bless {}, $_[0];
@@ -201,7 +201,30 @@ sub parse_rfc4646_tag ($$) {
             push @{$r{u}->[-1]}, $ext->[$i];
           }
         }
-      }
+      } # 'u'
+
+      if ($exttag eq 't' and $has_extension{$exttag} == 1) {
+        $r{t} = [undef];
+        my $field = undef;
+        my %has_field;
+        for my $i (1..$#$ext) {
+          if ($ext->[$i] =~ /\A[A-Za-z][0-9]\z/) {
+            $field = $ext->[$i];
+            $field =~ tr/A-Z/a-z/;
+            if ($has_field{$field}++) {
+              $self->onerror->(type => 'langtag:extension:t:field:duplication', # XXX
+                               value => $field,
+                               level => $Levels->{must}); ## RFC 6497
+            }
+            push @{$r{t}}, [$ext->[$i]];
+            next;
+          }
+          push @{$r{t}->[-1] ||= []}, $ext->[$i];
+        }
+        if (defined $r{t}->[0]) {
+          $r{t}->[0] = $self->parse_rfc4646_tag (join '-', @{$r{t}->[0]});
+        }
+      } # 't'
     }
   }
 
@@ -311,8 +334,8 @@ sub check_rfc5646_parsed_tag ($$) {
 ## NOTE: This method, with appropriate $self->onerror handler, is intended
 ## to be a "validating" processor of language tags, as defined in RFC
 ## 4646, if an output of the |parse_rfc4646_tag| method is inputed.
-sub check_rfc4646_parsed_tag ($$) {
-  my ($self, $tag_o) = @_;
+sub check_rfc4646_parsed_tag ($$;%) {
+  my ($self, $tag_o, %args) = @_;
 
   my $result = {well_formed => !@{$tag_o->{illegal}}, valid => 1};
   if (defined $tag_o->{language}) {
@@ -331,7 +354,7 @@ sub check_rfc4646_parsed_tag ($$) {
   my $tag_s_orig = $tag_s;
   $tag_s =~ tr/A-Z/a-z/;
 
-  my $check_case = sub ($$$) {
+  my $check_case = $args{ignore_case} ? sub { } : sub ($$$) {
     my ($type, $actual, $expected) = @_;
     
     $expected ||= '_lowercase';
@@ -736,7 +759,7 @@ sub check_rfc4646_parsed_tag ($$) {
         $self->onerror->(type => 'langtag:extension:unknown',
                    value => (join '-', @{$ext}),
                    level => $Levels->{langtag_fact})
-            unless $ext_type eq 'u';
+            unless $ext_type eq 'u' or $ext_type eq 't';
         
         ## NOTE: "When a language tag is to be used in a specific,
         ## known, protocol, it is RECOMMENDED that the language tag
@@ -774,11 +797,11 @@ sub check_rfc4646_parsed_tag ($$) {
         ## NOTE: We don't check whether the case is lowercase or not
         ## for unknown extensions (see note above on the case of
         ## invalid subtags).
-        if ($ext_type eq 'u') {
+        if ($ext_type eq 'u' or $ext_type eq 't') {
           ## The "u" extension (UTS #35 and RFC 6067)
           for (@{$ext}[1..$#$ext]) {
             if (/[A-Z]/) {
-              $self->onerror->(type => 'langtag:extension:u:case',
+              $self->onerror->(type => 'langtag:extension:'.$ext_type.':case', # XXX
                          value => $_,
                          level => $Levels->{warn}); # Canonical form
             }
@@ -889,7 +912,73 @@ sub check_rfc4646_parsed_tag ($$) {
         ## tag contains an extension which is not valid, the entire
         ## language tag is invalid.  However, for the "u" extension
         ## validity is not clearly defined.
-      }
+      } # 'u'
+
+      if ($tag_o->{t}) {
+        my @t = @{$tag_o->{t}};
+        my $langtag = shift @t;
+        if (defined $langtag) {
+          my $serialized = $self->serialize_parsed_tag ($langtag);
+          $serialized =~ tr/A-Z/a-z/;
+          if ({'en-gb-oed' => 1,
+               'sgn-be-fr' => 1,
+               'sgn-be-nl' => 1,
+               'sgn-ch-de' => 1}->{$serialized}) {
+            $self->onerror->(type => 'langtag:extension:t:irregular', # XXX
+                             value => $serialized,
+                             level => $Levels->{must}); # RFC 6497
+            delete $result->{valid} unless $self->{RFC5646};
+          } else {
+            my $r = $self->check_rfc4646_parsed_tag
+                ($langtag, ignore_case => 1);
+            delete $result->{valid}
+                if not $self->{RFC5646} and
+                    (not $r->{well_formed} or not $r->{valid} or
+                     $langtag->{grandfathered} or
+                     $self->canonicalize_rfc5646_tag ($serialized) ne $serialized);
+          }
+        }
+
+        while (@t) {
+          my $t = shift @t;
+          my $field = [@$t];
+          my $field_sep = shift @$field;
+          $field_sep =~ tr/A-Z/a-z/;
+          if ($Registry->{t_key}->{$field_sep}) {
+            my $value = join '-', @$field;
+            $value =~ tr/A-Z/a-z/;
+            if ($Registry->{'t_' . $field_sep}->{$value}) {
+              #
+            } elsif ($field_sep eq 'x0') {
+              if (grep { not /\A[0-9A-Za-z]{3,8}\z/ } @$field) {
+                $self->onerror->(type => 'langtag:extension:t:field:value:invalid', # XXX
+                                 text => $field_sep,
+                                 value => $value,
+                                 level => $Levels->{langtag_fact});
+                delete $result->{valid} unless $self->{RFC5646};
+              }
+            } else {
+              $self->onerror->(type => 'langtag:extension:t:field:value:invalid', # XXX
+                               text => $field_sep,
+                               value => $value,
+                               level => $Levels->{langtag_fact});
+              delete $result->{valid} unless $self->{RFC5646};
+            }
+          } else {
+            $self->onerror->(type => 'langtag:extension:t:field:invalid', # XXX
+                             value => $field_sep,
+                             level => $Levels->{langtag_fact});
+            delete $result->{valid} unless $self->{RFC5646};
+            delete $result->{valid} if not $self->{RFC5646} and
+                grep { not /\A[0-9A-Za-z]{3,8}\z/ } @$field;
+          }
+        }
+
+        ## According to RFC 4646 (but not in RFC 5646), if a language
+        ## tag contains an extension which is not valid, the entire
+        ## language tag is invalid.  However, for the "t" extension
+        ## validity is not clearly defined.
+      } # 't'
 
       if (@{$tag_o->{privateuse}}) {
         ## NOTE: "NOT RECOMMENDED where alternative exist or for

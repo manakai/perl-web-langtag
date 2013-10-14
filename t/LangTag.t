@@ -183,7 +183,7 @@ sub _parse_check_extension : Tests {
       }
     }
   }) for map { $data_d->file ($_)->stringify } qw[
-    validity-u-1.dat
+    validity-u-1.dat validity-t-1.dat
   ];
 } # _parse
 
