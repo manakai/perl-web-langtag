@@ -20,6 +20,12 @@ unless ($full) {
       delete $subtag->{Comments};
       delete $subtag->{Description};
       delete $subtag->{Scope};
+      $subtag->{_registered} = $subtag->{_registry}->{iana} || $subtag->{_registry}->{unicode};
+      delete $subtag->{_registry};
+    }
+    for my $name (keys %$_) {
+      next unless ref $_->{$name} eq 'HASH';
+      delete $_->{$name} unless delete $_->{$name}->{_registered};
     }
   }
 }
