@@ -1346,9 +1346,7 @@ sub extended_filtering_rfc4647_range ($$$) {
 
 # ------ Tag registry data ------
 
-*tag_registry_data = \&tag_registry_data_rfc5646;
-
-*tag_registry_data_rfc5646 = \&tag_registry_data_rfc4646;
+*tag_registry_data = *tag_registry_data_rfc5646 = \&tag_registry_data_rfc4646;
 
 sub tag_registry_data_rfc4646 ($$$) {
   my (undef, $type, $tag) = @_;
