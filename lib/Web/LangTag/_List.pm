@@ -12942,6 +12942,7 @@ $Web::LangTag::Registry = {
                       'greklow' => {},
                       'gujr' => {},
                       'guru' => {},
+                      'hanidays' => {},
                       'hanidec' => {},
                       'hans' => {},
                       'hansfin' => {},
