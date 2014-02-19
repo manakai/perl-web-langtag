@@ -1,5 +1,5 @@
 $Web::LangTag::Registry = {
-          '_file_date' => '2014-01-21',
+          '_file_date' => '2014-02-18',
           'extlang' => {
                          'aao' => {
                                     'Prefix' => [
@@ -13516,6 +13516,11 @@ $Web::LangTag::Registry = {
                                                      ],
                                          '_canon' => 'baku1926'
                                        },
+                         'balanka' => {
+                                        'Prefix' => [
+                                                      'blo'
+                                                    ]
+                                      },
                          'barla' => {
                                       'Prefix' => [
                                                     'kea'
