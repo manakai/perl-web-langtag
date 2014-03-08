@@ -212,7 +212,7 @@ sub parse_rfc4646_tag ($$) {
             $field = $ext->[$i];
             $field =~ tr/A-Z/a-z/;
             if ($has_field{$field}++) {
-              $self->onerror->(type => 'langtag:extension:t:field:duplication', # XXX
+              $self->onerror->(type => 'langtag:extension:t:field:duplication',
                                value => $field,
                                level => $Levels->{must}); ## RFC 6497
             }
@@ -540,8 +540,8 @@ sub check_rfc4646_parsed_tag ($$;%) {
               ## 2.9. ("validating" processor MUST check), RFC 4646
               ## 4.1. (SHOULD)
               $self->onerror->(type => 'langtag:extlang:prefix',
-                         value => $extlang,
-                         level => $Levels->{must});
+                               text => $prefixes->[0],
+                               level => $Levels->{must});
               delete $result->{valid} unless $self->{RFC5646};
             }
           }
@@ -801,7 +801,7 @@ sub check_rfc4646_parsed_tag ($$;%) {
           ## The "u" extension (UTS #35 and RFC 6067)
           for (@{$ext}[1..$#$ext]) {
             if (/[A-Z]/) {
-              $self->onerror->(type => 'langtag:extension:'.$ext_type.':case', # XXX
+              $self->onerror->(type => 'langtag:extension:'.$ext_type.':case',
                          value => $_,
                          level => $Levels->{warn}); # Canonical form
             }
@@ -945,7 +945,7 @@ sub check_rfc4646_parsed_tag ($$;%) {
                'sgn-be-fr' => 1,
                'sgn-be-nl' => 1,
                'sgn-ch-de' => 1}->{$serialized}) {
-            $self->onerror->(type => 'langtag:extension:t:irregular', # XXX
+            $self->onerror->(type => 'langtag:extension:t:irregular',
                              value => $serialized,
                              level => $Levels->{must}); # RFC 6497
             delete $result->{valid} unless $self->{RFC5646};
@@ -972,21 +972,21 @@ sub check_rfc4646_parsed_tag ($$;%) {
               #
             } elsif ($field_sep eq 'x0') {
               if (grep { not /\A[0-9A-Za-z]{3,8}\z/ } @$field) {
-                $self->onerror->(type => 'langtag:extension:t:field:value:invalid', # XXX
+                $self->onerror->(type => 'langtag:extension:t:field:value:invalid',
                                  text => $field_sep,
                                  value => $value,
                                  level => $Levels->{langtag_fact});
                 delete $result->{valid} unless $self->{RFC5646};
               }
             } else {
-              $self->onerror->(type => 'langtag:extension:t:field:value:invalid', # XXX
+              $self->onerror->(type => 'langtag:extension:t:field:value:invalid',
                                text => $field_sep,
                                value => $value,
                                level => $Levels->{langtag_fact});
               delete $result->{valid} unless $self->{RFC5646};
             }
           } else {
-            $self->onerror->(type => 'langtag:extension:t:field:invalid', # XXX
+            $self->onerror->(type => 'langtag:extension:t:field:invalid',
                              value => $field_sep,
                              level => $Levels->{langtag_fact});
             delete $result->{valid} unless $self->{RFC5646};
@@ -1023,8 +1023,8 @@ sub check_rfc4646_parsed_tag ($$;%) {
           } else {
             ## NOTE: RECOMMENDED (RFC 4646 2.1.)
             $self->onerror->(type => 'langtag:privateuse:case',
-                       value => $_,
-                       level => $Levels->{should});
+                             value => $_,
+                             level => $Levels->{should});
           }
         }
       }
