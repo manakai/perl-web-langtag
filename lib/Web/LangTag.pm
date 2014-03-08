@@ -1,7 +1,7 @@
 package Web::LangTag;
 use strict;
 use warnings;
-our $VERSION = '6.0';
+our $VERSION = '7.0';
 
 sub new ($) {
   return bless {}, $_[0];
@@ -843,63 +843,84 @@ sub check_rfc4646_parsed_tag ($$;%) {
           }
           $prev = $key;
 
-          if ($key eq 'vt') {
-            ## UTS #35 Appendix Q.
-            if (not defined $keyword->[1]) {
-              $self->onerror->(type => 'langtag:extension:u:type:missing',
-                         text => 'vt',
-                         level => $Levels->{langtag_fact});
-              delete $result->{valid} unless $self->{RFC5646};
-            }
-
-            for (@$keyword[1, 2]) {
-              next unless defined;
-              if (not /\A[0-9A-Fa-f]{4,6}\z/ or
-                  0x10FFFF < hex) {
-                $self->onerror->(type => 'langtag:extension:u:type:invalid',
-                           text => 'vt',
-                           value => $_,
-                           level => $Levels->{langtag_fact}); # may
-                delete $result->{valid} unless $self->{RFC5646};
-              }
-            }
-
-            for (@$keyword[3..$#$keyword]) {
-              $self->onerror->(type => 'langtag:extension:u:type:nosemantics',
-                         text => 'vt',
-                         value => $_,
-                         level => $Levels->{langtag_fact});
-              delete $result->{valid} unless $self->{RFC5646};
-            }
-          } elsif ($Registry->{u_key}->{$key}) {
-            my $type = $keyword->[1];
-            $type =~ tr/A-Z/a-z/ if defined $type;
-            if (not defined $type) {
-              if ($Registry->{'u_' . $key}->{true}) {
-                #
-              } else {
-                ## Semantics is not defined anywhere
+          if ($Registry->{u_key}->{$key}) {
+            my $vt = $Registry->{u_key}->{$key}->{_value_type} || '';
+            if ($vt eq 'CODEPOINTS') {
+              ## UTS #35 Appendix Q.
+              if (not defined $keyword->[1]) {
                 $self->onerror->(type => 'langtag:extension:u:type:missing',
-                           text => $key,
-                           level => $Levels->{langtag_fact});
+                                 text => $key,
+                                 level => $Levels->{langtag_fact});
                 delete $result->{valid} unless $self->{RFC5646};
               }
-            } elsif ($Registry->{'u_' . $key}->{$type}) {
-              for (@{$keyword}[2..$#$keyword]) {
-                ## Semantics is not defined anywhere
-                $self->onerror->(type => 'langtag:extension:u:type:nosemantics',
-                           text => $key,
-                           value => $_,
-                           level => $Levels->{langtag_fact});
+
+              for (@$keyword[1..$#$keyword]) {
+                next unless defined;
+                if (not /\A[0-9A-Fa-f]{4,6}\z/ or 0x10FFFF < hex) {
+                  $self->onerror->(type => 'langtag:extension:u:type:invalid',
+                                   text => $key,
+                                   value => $_,
+                                   level => $Levels->{langtag_fact}); # may
+                  delete $result->{valid} unless $self->{RFC5646};
+                }
+              }
+            } elsif ($vt eq 'REORDER_CODE') {
+              ## UTS #35 Appendix Q.
+              my %used;
+              for (@$keyword[1..$#$keyword]) {
+                my $type = $_;
+                $type =~ tr/A-Z/a-z/;
+                if ($used{$type}) {
+                  $self->onerror->(type => 'langtag:extension:u:type:duplication',
+                                   text => $key,
+                                   value => $_,
+                                   level => $Levels->{langtag_fact}); ## UTS #35
+                  delete $result->{valid} unless $self->{RFC5646};
+                } else {
+                  my $def = $Registry->{'u_' . $key}->{$type};
+                  $used{$type} = 1;
+                  if (not defined $def) {
+                    $self->onerror->(type => 'langtag:extension:u:type:invalid',
+                                     text => $key,
+                                     value => $type,
+                                     level => $Levels->{langtag_fact});
+                    delete $result->{valid} unless $self->{RFC5646};
+                  } elsif ($def->{_deprecated}) {
+                    $self->onerror->(type => 'langtag:extension:u:type:deprecated',
+                                     text => $def->{_preferred}, # might be undef
+                                     value => $type,
+                                     level => 'w');
+                  }
+                }
+              }
+            } else { # $vt
+              my $type = join '-', @$keyword[1..$#$keyword];
+              $type =~ tr/A-Z/a-z/;
+              if (not length $type) {
+                if ($Registry->{'u_' . $key}->{true}) { ## Has |true| value
+                  #
+                } else {
+                  ## Semantics is not defined anywhere
+                  $self->onerror->(type => 'langtag:extension:u:type:missing',
+                                   text => $key,
+                                   level => $Levels->{langtag_fact});
+                  delete $result->{valid} unless $self->{RFC5646};
+                }
+              } elsif (my $def = $Registry->{'u_' . $key}->{$type}) {
+                if ($def->{_deprecated}) {
+                  $self->onerror->(type => 'langtag:extension:u:type:deprecated',
+                                   text => $def->{_preferred}, # might be undef
+                                   value => $type,
+                                   level => 'w');
+                }
+              } else {
+                $self->onerror->(type => 'langtag:extension:u:type:invalid',
+                                 text => $key,
+                                 value => $type,
+                                 level => $Levels->{langtag_fact});
                 delete $result->{valid} unless $self->{RFC5646};
               }
-            } else {
-              $self->onerror->(type => 'langtag:extension:u:type:invalid',
-                         text => $key,
-                         value => $type,
-                         level => $Levels->{langtag_fact});
-              delete $result->{valid} unless $self->{RFC5646};
-            }
+            } # $vt
           } else {
             $self->onerror->(type => 'langtag:extension:u:key:invalid',
                        value => $key,
@@ -1363,7 +1384,7 @@ sub tag_registry_data_rfc4646 ($$$) {
 
 =head1 LICENSE
 
-Copyright 2007-2013 Wakaba <wakaba@suikawiki.org>.
+Copyright 2007-2014 Wakaba <wakaba@suikawiki.org>.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
