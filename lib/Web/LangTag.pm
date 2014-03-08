@@ -541,6 +541,7 @@ sub check_rfc4646_parsed_tag ($$;%) {
               ## 4.1. (SHOULD)
               $self->onerror->(type => 'langtag:extlang:prefix',
                                text => $prefixes->[0],
+                               value => $extlang,
                                level => $Levels->{must});
               delete $result->{valid} unless $self->{RFC5646};
             }
