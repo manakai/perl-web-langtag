@@ -1,9 +1,8 @@
-package test::Web::LangTag;
 use strict;
 use warnings;
 use Path::Class;
-use lib file (__FILE__)->dir->parent->subdir ('t_deps', 'modules', 'testdataparser', 'lib')->stringify;
-use base qw(Test::Class);
+use lib glob file (__FILE__)->dir->parent->subdir ('t_deps', 'modules', '*', 'lib')->stringify;
+use Test::X1;
 use Test::More;
 use Test::Differences;
 use Test::HTCT::Parser;
@@ -11,16 +10,17 @@ use Web::LangTag;
 
 my $data_d = file (__FILE__)->dir->parent->subdir ('t_deps', 'tests', 'langtags');
 
-sub _parse : Tests {
-  for_each_test ($_, {
-    1766 => {is_list => 1},
-    3066 => {is_list => 1},
-    4646 => {is_list => 1},
-    5646 => {is_list => 1},
-  }, sub {
-    my $test = shift;
-    my $lt = Web::LangTag->new;
-    
+for_each_test ($_, {
+  1766 => {is_list => 1},
+  3066 => {is_list => 1},
+  4646 => {is_list => 1},
+  5646 => {is_list => 1},
+}, sub {
+  my $test = shift;
+  my $lt = Web::LangTag->new;
+  
+  test {
+    my $c = shift;
     our @errors = ();
     my $onerror = sub {
       my %opt = @_;
@@ -109,19 +109,21 @@ sub _parse : Tests {
             '_check1766 ' . $test->{data}->[0];
       }
     }
-  }) for map { $data_d->file ($_)->stringify } qw[
-    validity-core-1.dat
-  ];
-} # _parse
+    done $c;
+  } name => 'basic';
+}) for map { $data_d->file ($_)->stringify } qw[
+  validity-core-1.dat
+];
 
-sub _parse_check_extension : Tests {
-  for_each_test ($_, {
-    4646 => {is_list => 1},
-    5646 => {is_list => 1},
-  }, sub {
-    my $test = shift;
-    my $lt = Web::LangTag->new;
-    
+for_each_test ($_, {
+  4646 => {is_list => 1},
+  5646 => {is_list => 1},
+}, sub {
+  my $test = shift;
+  my $lt = Web::LangTag->new;
+  
+  test {
+    my $c = shift;
     our @errors = ();
     my $onerror = sub {
       my %opt = @_;
@@ -182,12 +184,14 @@ sub _parse_check_extension : Tests {
         is $extlang, ($test->{extlang5646} || $test->{canon5646} || $test->{data})->[0];
       }
     }
-  }) for map { $data_d->file ($_)->stringify } qw[
-    validity-u-1.dat validity-t-1.dat
-  ];
-} # _parse
+    done $c;
+  } name => 'ext';
+}) for map { $data_d->file ($_)->stringify } qw[
+  validity-u-1.dat validity-t-1.dat
+];
 
-sub _parse_zh_min_nan : Test(5) {
+test {
+  my $c = shift;
   my $parsed1 = Web::LangTag->new->parse_rfc4646_tag ('zh-min-nan');
   eq_or_diff $parsed1, {
     language => 'zh',
@@ -224,62 +228,68 @@ sub _parse_zh_min_nan : Test(5) {
   my $result3 = $lt->check_parsed_tag ($parsed3);
   eq_or_diff $result3, {well_formed => 1, valid => 1};
   is $error3, 1;
-} # _parse_zh_min_nan
+  done $c;
+} n => 5, name => 'zh-min-nan';
 
-sub _parse_u_extension : Test(10) {
-  for (
-    ['en-u-ab', [qw[u ab]], [[], [qw[ab]]]],
-    ['en-u-ab-cde-fgh', [qw[u ab cde fgh]], [[], [qw[ab cde fgh]]]],
-    ['en-u-ab-cd', [qw[u ab cd]], [[], [qw[ab]], [qw[cd]]]],
-    ['en-u-ab-cde-ab', [qw[u ab cde ab]], [[], [qw[ab cde]], [qw[ab]]]],
-    ['en-u-ab-12-xyz-AB', [qw[u ab 12 xyz AB]], [[], [qw[ab]], [qw[12 xyz]], [qw[AB]]]],
-    ['en-u-abc', [qw[u abc]], [[qw[abc]]]],
-    ['en-u-abc-def', [qw[u abc def]], [[qw[abc def]]]],
-    ['en-u-abc-12', [qw[u abc 12]], [[qw[abc]], [qw[12]]]],
-    ['en-U-abc', [qw[U abc]], [[qw[abc]]]],
-    ['en-u-1ab', [qw[u 1ab]], [[qw[1ab]]]],
-  ) {
-    my $parsed = Web::LangTag->new->parse_rfc5646_tag ($_->[0]);
+for my $test (
+  ['en-u-ab', [qw[u ab]], [[], [qw[ab]]]],
+  ['en-u-ab-cde-fgh', [qw[u ab cde fgh]], [[], [qw[ab cde fgh]]]],
+  ['en-u-ab-cd', [qw[u ab cd]], [[], [qw[ab]], [qw[cd]]]],
+  ['en-u-ab-cde-ab', [qw[u ab cde ab]], [[], [qw[ab cde]], [qw[ab]]]],
+  ['en-u-ab-12-xyz-AB', [qw[u ab 12 xyz AB]], [[], [qw[ab]], [qw[12 xyz]], [qw[AB]]]],
+  ['en-u-abc', [qw[u abc]], [[qw[abc]]]],
+  ['en-u-abc-def', [qw[u abc def]], [[qw[abc def]]]],
+  ['en-u-abc-12', [qw[u abc 12]], [[qw[abc]], [qw[12]]]],
+  ['en-U-abc', [qw[U abc]], [[qw[abc]]]],
+  ['en-u-1ab', [qw[u 1ab]], [[qw[1ab]]]],
+) {
+  test {
+    my $c = shift;
+    my $parsed = Web::LangTag->new->parse_rfc5646_tag ($test->[0]);
     eq_or_diff $parsed, {
       language => 'en',
       extlang => [],
       variant => [],
       illegal => [],
       privateuse => [],
-      extension => [$_->[1]],
-      u => $_->[2],
-  };
-  }
-} # _parse_u_extension
+      extension => [$test->[1]],
+      u => $test->[2],
+    };
+    done $c;
+  } n => 1, name => 'u extension';
+}
 
-sub _normalize : Test(26) {
-  for (
-    ['', ''],
-    ['ja', 'ja'],
-    ['ja-jp', 'ja-JP'],
-    ['ja-JP', 'ja-JP'],
-    ['en-CA-x-ca', 'en-CA-x-ca'],
-    ['sgn-BE-FR', 'sgn-BE-FR'],
-    ['az-Latn-x-latn', 'az-Latn-x-latn'],
-    ['in-in', 'in-IN'],
-    ["\x{0130}n-\x{0130}n", "\x{0130}n-\x{0130}N"],
-    ["\x{0131}n-\x{0131}n", "\x{0131}n-\x{0131}N"],
-    ['ja-latn-jp-u-ja-JP-Latn' => 'ja-Latn-JP-u-ja-jp-latn'],
-    ['ja-latn-jp-i-ja-JP-Latn' => 'ja-Latn-JP-i-ja-JP-Latn'],
-    ['ja-latn-jp-x-ja-JP-Latn' => 'ja-Latn-JP-x-ja-JP-Latn'],
-  ) {
-    is +Web::LangTag->new->normalize_rfc5646_tag ($_->[0]), $_->[1];
-    is +Web::LangTag->new->normalize_tag ($_->[0]), $_->[1];
-  }
-} # _normalize
+for my $test (
+  ['', ''],
+  ['ja', 'ja'],
+  ['ja-jp', 'ja-JP'],
+  ['ja-JP', 'ja-JP'],
+  ['en-CA-x-ca', 'en-CA-x-ca'],
+  ['sgn-BE-FR', 'sgn-BE-FR'],
+  ['az-Latn-x-latn', 'az-Latn-x-latn'],
+  ['in-in', 'in-IN'],
+  ["\x{0130}n-\x{0130}n", "\x{0130}n-\x{0130}N"],
+  ["\x{0131}n-\x{0131}n", "\x{0131}n-\x{0131}N"],
+  ['ja-latn-jp-u-ja-JP-Latn' => 'ja-Latn-JP-u-ja-jp-latn'],
+  ['ja-latn-jp-i-ja-JP-Latn' => 'ja-Latn-JP-i-ja-JP-Latn'],
+  ['ja-latn-jp-x-ja-JP-Latn' => 'ja-Latn-JP-x-ja-JP-Latn'],
+) {
+  test {
+    my $c = shift;
+    is +Web::LangTag->new->normalize_rfc5646_tag ($test->[0]), $test->[1];
+    is +Web::LangTag->new->normalize_tag ($test->[0]), $test->[1];
+    done $c;
+  } n => 2, name => 'normalize';
+}
 
-sub _canonicalize : Test(2) {
+test {
+  my $c = shift;
   is +Web::LangTag->new->canonicalize_tag ('zh-min-nan'), 'nan';
   is +Web::LangTag->new->to_extlang_form_tag ('zh-min-nan'), 'zh-nan';
-} # _canonicalize
+  done $c;
+} n => 2, name => 'canonicalize';
 
-sub _basic_filtering_rfc4647_range : Test(105) {
-  for (
+for my $test (
      [undef, undef, 1],
      ['*', undef, 1],
      ['', undef, 1],
@@ -315,18 +325,20 @@ sub _basic_filtering_rfc4647_range : Test(105) {
      ['x-hoge', 'en-x-hoge-fuga', 0],
      ['x', 'x-hoge-fuga', 1],
      ['x-', 'x-hoge-fuga', 0],
-  ) {
-    is !!Web::LangTag->new->basic_filtering_range ($_->[0], $_->[1]),
-       !!$_->[2];
-    is !!Web::LangTag->new->basic_filtering_rfc4647_range ($_->[0], $_->[1]),
-       !!$_->[2];
-    is !!Web::LangTag->new->match_rfc3066_range ($_->[0], $_->[1]),
-       !!$_->[2];
-  }
-} # _basic_filtering_rfc4647_range
+) {
+  test {
+    my $c = shift;
+    is !!Web::LangTag->new->basic_filtering_range ($test->[0], $test->[1]),
+       !!$test->[2];
+    is !!Web::LangTag->new->basic_filtering_rfc4647_range ($test->[0], $test->[1]),
+       !!$test->[2];
+    is !!Web::LangTag->new->match_rfc3066_range ($test->[0], $test->[1]),
+       !!$test->[2];
+    done $c;
+  } n => 3, name => 'basic filtering range';
+}
 
-sub _extended_filtering_rfc4647_range : Test(136) {
-  for (
+for my $test (
      [undef, undef, 1],
      ['*', undef, 1],
      ['', undef, 1],
@@ -395,20 +407,24 @@ sub _extended_filtering_rfc4647_range : Test(136) {
      ['x', 'ja-x-latn', 0],
      ['x', 'x-latn', 1],
      ['latn', 'x-latn', 0],
-  ) {
-    is !!Web::LangTag->new->extended_filtering_range ($_->[0], $_->[1]),
-       !!$_->[2];
-    is !!Web::LangTag->new->extended_filtering_rfc4647_range ($_->[0], $_->[1]),
-       !!$_->[2];
-  }
-} # _extended_filtering_rfc4647_range
+) {
+  test {
+    my $c = shift;
+    is !!Web::LangTag->new->extended_filtering_range ($test->[0], $test->[1]),
+       !!$test->[2];
+    is !!Web::LangTag->new->extended_filtering_rfc4647_range ($test->[0], $test->[1]),
+       !!$test->[2];
+    done $c;
+  } n => 2, name => 'extended filtering range';
+}
 
-sub _tag_registry_data : Test(60) {
-  for my $method (qw(
-    tag_registry_data_rfc4646
-    tag_registry_data_rfc5646
-    tag_registry_data
-  )) {
+for my $method (qw(
+  tag_registry_data_rfc4646
+  tag_registry_data_rfc5646
+  tag_registry_data
+)) {
+  test {
+    my $c = shift;
     my $ja = Web::LangTag->new->$method (language => 'ja');
     ok !$ja->{_canon};
     is $ja->{_added}, '2005-10-16';
@@ -440,11 +456,10 @@ sub _tag_registry_data : Test(60) {
     my $redundant = Web::LangTag->new->$method (redundant => 'zh-yue');
     ok $redundant->{_deprecated};
     is $redundant->{_preferred}, 'yue';
-  }
-} # tag_registry_data
+    done $c;
+  } n => 20, name => $method;
+}
 
-__PACKAGE__->runtests;
-
-1;
+run_tests;
 
 ## License: Public Domain.
