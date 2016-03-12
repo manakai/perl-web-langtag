@@ -1,14 +1,14 @@
 use strict;
 use warnings;
-use Path::Class;
-use lib glob file (__FILE__)->dir->parent->subdir ('t_deps', 'modules', '*', 'lib')->stringify;
+use Path::Tiny;
+use lib glob path (__FILE__)->parent->parent->child ('t_deps', 'modules', '*', 'lib')->stringify;
 use Test::X1;
 use Test::More;
 use Test::Differences;
 use Test::HTCT::Parser;
 use Web::LangTag;
 
-my $data_d = file (__FILE__)->dir->parent->subdir ('t_deps', 'tests', 'langtags');
+my $data_path = path (__FILE__)->parent->parent->child ('t_deps', 'tests', 'langtags');
 
 for_each_test ($_, {
   1766 => {is_list => 1},
@@ -111,7 +111,7 @@ for_each_test ($_, {
     }
     done $c;
   } name => 'basic';
-}) for map { $data_d->file ($_)->stringify } qw[
+}) for map { $data_path->child ($_)->stringify } qw[
   validity-core-1.dat
 ];
 
@@ -186,7 +186,7 @@ for_each_test ($_, {
     }
     done $c;
   } name => 'ext';
-}) for map { $data_d->file ($_)->stringify } qw[
+}) for map { $data_path->child ($_)->stringify } qw[
   validity-u-1.dat validity-t-1.dat
 ];
 
