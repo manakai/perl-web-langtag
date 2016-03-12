@@ -1,5 +1,3 @@
-# -*- Makefile -*-
-
 all:
 
 update: update-registry
@@ -9,8 +7,17 @@ WGET = wget
 GIT = git
 PERL = ./perl
 
+updatenightly: update-submodules dataautoupdate-commit
+
+update-submodules: local/bin/pmbp.pl
+	curl https://gist.githubusercontent.com/wakaba/34a71d3137a52abb562d/raw/gistfile1.txt | sh
+	git add t_deps/modules t_deps/tests
+	perl local/bin/pmbp.pl --update
+	git add config
+
+dataautoupdate-commit: dataautoupdate
+	git add lib
 dataautoupdate: clean deps update
-	$(GIT) add lib/Web/LangTag/_List.pm lib/Web/LangTag/_ListFull.pm
 
 ## ------ Setup ------
 
