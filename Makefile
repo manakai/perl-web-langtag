@@ -6,6 +6,7 @@ clean: clean-registry
 WGET = wget
 GIT = git
 PERL = ./perl
+CURL = curl
 
 updatenightly: update-submodules dataautoupdate-commit
 
@@ -14,6 +15,7 @@ update-submodules: local/bin/pmbp.pl
 	git add t_deps/modules t_deps/tests
 	perl local/bin/pmbp.pl --update
 	git add config
+	$(CURL) -sSLf https://raw.githubusercontent.com/wakaba/ciconfig/master/ciconfig | RUN_GIT=1 REMOVE_UNUSED=1 perl
 
 dataautoupdate-commit: dataautoupdate
 	git add lib
