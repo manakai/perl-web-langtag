@@ -1,5 +1,5 @@
 $Web::LangTag::Registry = {
-          '_file_date' => '2016-02-10',
+          '_file_date' => '2020-04-01',
           'extlang' => {
                          'aao' => {
                                     'Prefix' => [
@@ -215,6 +215,7 @@ $Web::LangTag::Registry = {
                                     'Prefix' => [
                                                   'ar'
                                                 ],
+                                    '_deprecated' => 1,
                                     '_preferred' => 'bbz'
                                   },
                          'bfi' => {
@@ -307,6 +308,12 @@ $Web::LangTag::Registry = {
                                                 ],
                                     '_preferred' => 'cmn'
                                   },
+                         'cnp' => {
+                                    'Prefix' => [
+                                                  'zh'
+                                                ],
+                                    '_preferred' => 'cnp'
+                                  },
                          'coa' => {
                                     'Prefix' => [
                                                   'ms'
@@ -360,6 +367,12 @@ $Web::LangTag::Registry = {
                                                   'sgn'
                                                 ],
                                     '_preferred' => 'csn'
+                                  },
+                         'csp' => {
+                                    'Prefix' => [
+                                                  'zh'
+                                                ],
+                                    '_preferred' => 'csp'
                                   },
                          'csq' => {
                                     'Prefix' => [
@@ -743,6 +756,7 @@ $Web::LangTag::Registry = {
                                     'Prefix' => [
                                                   'sgn'
                                                 ],
+                                    '_deprecated' => 1,
                                     '_preferred' => 'lsg'
                                   },
                          'lsl' => {
@@ -750,6 +764,12 @@ $Web::LangTag::Registry = {
                                                   'sgn'
                                                 ],
                                     '_preferred' => 'lsl'
+                                  },
+                         'lsn' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'lsn'
                                   },
                          'lso' => {
                                     'Prefix' => [
@@ -769,6 +789,12 @@ $Web::LangTag::Registry = {
                                                 ],
                                     '_preferred' => 'lst'
                                   },
+                         'lsv' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'lsv'
+                                  },
                          'lsy' => {
                                     'Prefix' => [
                                                   'sgn'
@@ -786,6 +812,12 @@ $Web::LangTag::Registry = {
                                                   'lv'
                                                 ],
                                     '_preferred' => 'lvs'
+                                  },
+                         'lws' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'lws'
                                   },
                          'lzh' => {
                                     'Prefix' => [
@@ -973,6 +1005,12 @@ $Web::LangTag::Registry = {
                                                 ],
                                     '_preferred' => 'pga'
                                   },
+                         'pgz' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'pgz'
+                                  },
                          'pks' => {
                                     'Prefix' => [
                                                   'sgn'
@@ -1055,6 +1093,7 @@ $Web::LangTag::Registry = {
                                     'Prefix' => [
                                                   'sgn'
                                                 ],
+                                    '_deprecated' => 1,
                                     '_preferred' => 'rsi'
                                   },
                          'rsl' => {
@@ -1062,6 +1101,12 @@ $Web::LangTag::Registry = {
                                                   'sgn'
                                                 ],
                                     '_preferred' => 'rsl'
+                                  },
+                         'rsm' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'rsm'
                                   },
                          'sdl' => {
                                     'Prefix' => [
@@ -1170,6 +1215,12 @@ $Web::LangTag::Registry = {
                                                   'sgn'
                                                 ],
                                     '_preferred' => 'syy'
+                                  },
+                         'szs' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'szs'
                                   },
                          'tmw' => {
                                     'Prefix' => [
@@ -1291,6 +1342,12 @@ $Web::LangTag::Registry = {
                                                 ],
                                     '_preferred' => 'vsv'
                                   },
+                         'wbs' => {
+                                    'Prefix' => [
+                                                  'sgn'
+                                                ],
+                                    '_preferred' => 'wbs'
+                                  },
                          'wuu' => {
                                     'Prefix' => [
                                                   'zh'
@@ -1325,7 +1382,8 @@ $Web::LangTag::Registry = {
                                     'Prefix' => [
                                                   'sgn'
                                                 ],
-                                    '_deprecated' => 1
+                                    '_deprecated' => 1,
+                                    '_preferred' => 'yds'
                                   },
                          'ygs' => {
                                     'Prefix' => [
@@ -1705,7 +1763,9 @@ $Web::LangTag::Registry = {
                           'aip' => {},
                           'aiq' => {},
                           'air' => {},
-                          'ais' => {},
+                          'ais' => {
+                                     '_deprecated' => 1
+                                   },
                           'ait' => {},
                           'aiw' => {},
                           'aix' => {},
@@ -1830,7 +1890,9 @@ $Web::LangTag::Registry = {
                           'aoe' => {},
                           'aof' => {},
                           'aog' => {},
-                          'aoh' => {},
+                          'aoh' => {
+                                     '_deprecated' => 1
+                                   },
                           'aoi' => {},
                           'aoj' => {},
                           'aok' => {},
@@ -1911,7 +1973,10 @@ $Web::LangTag::Registry = {
                           'asa' => {},
                           'asb' => {},
                           'asc' => {},
-                          'asd' => {},
+                          'asd' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'snz'
+                                   },
                           'ase' => {},
                           'asf' => {},
                           'asg' => {},
@@ -2051,7 +2116,9 @@ $Web::LangTag::Registry = {
                                      '_deprecated' => 1,
                                      '_preferred' => 'nun'
                                    },
-                          'ayy' => {},
+                          'ayy' => {
+                                     '_deprecated' => 1
+                                   },
                           'ayz' => {},
                           'az' => {},
                           'aza' => {},
@@ -2116,7 +2183,9 @@ $Web::LangTag::Registry = {
                           'bbw' => {},
                           'bbx' => {},
                           'bby' => {},
-                          'bbz' => {},
+                          'bbz' => {
+                                     '_deprecated' => 1
+                                   },
                           'bca' => {},
                           'bcb' => {},
                           'bcc' => {},
@@ -2234,7 +2303,10 @@ $Web::LangTag::Registry = {
                           'bgj' => {},
                           'bgk' => {},
                           'bgl' => {},
-                          'bgm' => {},
+                          'bgm' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'bcg'
+                                   },
                           'bgn' => {},
                           'bgo' => {},
                           'bgp' => {},
@@ -2466,7 +2538,9 @@ $Web::LangTag::Registry = {
                           'boy' => {},
                           'boz' => {},
                           'bpa' => {},
-                          'bpb' => {},
+                          'bpb' => {
+                                     '_deprecated' => 1
+                                   },
                           'bpd' => {},
                           'bpg' => {},
                           'bph' => {},
@@ -2579,7 +2653,9 @@ $Web::LangTag::Registry = {
                           'bti' => {},
                           'btj' => {},
                           'btk' => {},
-                          'btl' => {},
+                          'btl' => {
+                                     '_deprecated' => 1
+                                   },
                           'btm' => {},
                           'btn' => {},
                           'bto' => {},
@@ -2779,9 +2855,13 @@ $Web::LangTag::Registry = {
                           'cbb' => {},
                           'cbc' => {},
                           'cbd' => {},
-                          'cbe' => {},
+                          'cbe' => {
+                                     '_deprecated' => 1
+                                   },
                           'cbg' => {},
-                          'cbh' => {},
+                          'cbh' => {
+                                     '_deprecated' => 1
+                                   },
                           'cbi' => {},
                           'cbj' => {},
                           'cbk' => {},
@@ -2796,7 +2876,9 @@ $Web::LangTag::Registry = {
                           'cbv' => {},
                           'cbw' => {},
                           'cby' => {},
-                          'cca' => {},
+                          'cca' => {
+                                     '_deprecated' => 1
+                                   },
                           'ccc' => {},
                           'ccd' => {},
                           'cce' => {},
@@ -2819,7 +2901,9 @@ $Web::LangTag::Registry = {
                           'cdd' => {},
                           'cde' => {},
                           'cdf' => {},
-                          'cdg' => {},
+                          'cdg' => {
+                                     '_deprecated' => 1
+                                   },
                           'cdh' => {},
                           'cdi' => {},
                           'cdj' => {},
@@ -2838,6 +2922,7 @@ $Web::LangTag::Registry = {
                           'cel' => {},
                           'cen' => {},
                           'cet' => {},
+                          'cey' => {},
                           'cfa' => {},
                           'cfd' => {},
                           'cfg' => {},
@@ -2905,6 +2990,7 @@ $Web::LangTag::Registry = {
                           'ckb' => {},
                           'ckh' => {},
                           'ckl' => {},
+                          'ckm' => {},
                           'ckn' => {},
                           'cko' => {},
                           'ckq' => {},
@@ -2956,6 +3042,8 @@ $Web::LangTag::Registry = {
                           'cnk' => {},
                           'cnl' => {},
                           'cno' => {},
+                          'cnp' => {},
+                          'cnr' => {},
                           'cns' => {},
                           'cnt' => {},
                           'cnu' => {},
@@ -2983,7 +3071,10 @@ $Web::LangTag::Registry = {
                           'cov' => {},
                           'cow' => {},
                           'cox' => {},
-                          'coy' => {},
+                          'coy' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'pij'
+                                   },
                           'coz' => {},
                           'cpa' => {},
                           'cpb' => {},
@@ -3000,7 +3091,10 @@ $Web::LangTag::Registry = {
                           'cpx' => {},
                           'cpy' => {},
                           'cqd' => {},
-                          'cqu' => {},
+                          'cqu' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'quh'
+                                   },
                           'cr' => {},
                           'cra' => {},
                           'crb' => {},
@@ -3044,6 +3138,7 @@ $Web::LangTag::Registry = {
                           'csm' => {},
                           'csn' => {},
                           'cso' => {},
+                          'csp' => {},
                           'csq' => {},
                           'csr' => {},
                           'css' => {},
@@ -3078,7 +3173,9 @@ $Web::LangTag::Registry = {
                           'cuj' => {},
                           'cuk' => {},
                           'cul' => {},
-                          'cum' => {},
+                          'cum' => {
+                                     '_deprecated' => 1
+                                   },
                           'cuo' => {},
                           'cup' => {},
                           'cuq' => {},
@@ -3089,6 +3186,7 @@ $Web::LangTag::Registry = {
                           'cuv' => {},
                           'cuw' => {},
                           'cux' => {},
+                          'cuy' => {},
                           'cv' => {},
                           'cvg' => {},
                           'cvn' => {},
@@ -3207,7 +3305,9 @@ $Web::LangTag::Registry = {
                           'dgr' => {},
                           'dgs' => {},
                           'dgt' => {},
-                          'dgu' => {},
+                          'dgu' => {
+                                     '_deprecated' => 1
+                                   },
                           'dgw' => {},
                           'dgx' => {},
                           'dgz' => {},
@@ -3245,7 +3345,10 @@ $Web::LangTag::Registry = {
                           'diq' => {},
                           'dir' => {},
                           'dis' => {},
-                          'dit' => {},
+                          'dit' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'dif'
+                                   },
                           'diu' => {},
                           'diw' => {},
                           'dix' => {},
@@ -3286,6 +3389,7 @@ $Web::LangTag::Registry = {
                           'dmc' => {},
                           'dmd' => {},
                           'dme' => {},
+                          'dmf' => {},
                           'dmg' => {},
                           'dmk' => {},
                           'dml' => {},
@@ -3307,6 +3411,7 @@ $Web::LangTag::Registry = {
                           'dnj' => {},
                           'dnk' => {},
                           'dnn' => {},
+                          'dno' => {},
                           'dnr' => {},
                           'dnt' => {},
                           'dnu' => {},
@@ -3350,7 +3455,10 @@ $Web::LangTag::Registry = {
                           'drn' => {},
                           'dro' => {},
                           'drq' => {},
-                          'drr' => {},
+                          'drr' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'kzk'
+                                   },
                           'drs' => {},
                           'drt' => {},
                           'dru' => {},
@@ -3376,6 +3484,7 @@ $Web::LangTag::Registry = {
                           'dti' => {},
                           'dtk' => {},
                           'dtm' => {},
+                          'dtn' => {},
                           'dto' => {},
                           'dtp' => {},
                           'dtr' => {},
@@ -3386,13 +3495,17 @@ $Web::LangTag::Registry = {
                           'dua' => {},
                           'dub' => {},
                           'duc' => {},
-                          'dud' => {},
+                          'dud' => {
+                                     '_deprecated' => 1
+                                   },
                           'due' => {},
                           'duf' => {},
                           'dug' => {},
                           'duh' => {},
                           'dui' => {},
-                          'duj' => {},
+                          'duj' => {
+                                     '_deprecated' => 1
+                                   },
                           'duk' => {},
                           'dul' => {},
                           'dum' => {},
@@ -3413,12 +3526,16 @@ $Web::LangTag::Registry = {
                                   },
                           'dva' => {},
                           'dwa' => {},
+                          'dwk' => {},
                           'dwl' => {
                                      '_deprecated' => 1
                                    },
                           'dwr' => {},
                           'dws' => {},
+                          'dwu' => {},
                           'dww' => {},
+                          'dwy' => {},
+                          'dwz' => {},
                           'dya' => {},
                           'dyb' => {},
                           'dyd' => {},
@@ -3441,6 +3558,7 @@ $Web::LangTag::Registry = {
                           'dzl' => {},
                           'dzn' => {},
                           'eaa' => {},
+                          'ebc' => {},
                           'ebg' => {},
                           'ebk' => {},
                           'ebo' => {},
@@ -3465,7 +3583,9 @@ $Web::LangTag::Registry = {
                           'eiv' => {},
                           'eja' => {},
                           'eka' => {},
-                          'ekc' => {},
+                          'ekc' => {
+                                     '_deprecated' => 1
+                                   },
                           'eke' => {},
                           'ekg' => {},
                           'eki' => {},
@@ -3545,6 +3665,7 @@ $Web::LangTag::Registry = {
                                     '_suppress' => 'latn'
                                   },
                           'ese' => {},
+                          'esg' => {},
                           'esh' => {},
                           'esi' => {},
                           'esk' => {},
@@ -3638,6 +3759,7 @@ $Web::LangTag::Registry = {
                           'fly' => {},
                           'fmp' => {},
                           'fmu' => {},
+                          'fnb' => {},
                           'fng' => {},
                           'fni' => {},
                           'fo' => {
@@ -3787,6 +3909,7 @@ $Web::LangTag::Registry = {
                           'geb' => {},
                           'gec' => {},
                           'ged' => {},
+                          'gef' => {},
                           'geg' => {},
                           'geh' => {},
                           'gei' => {},
@@ -3814,8 +3937,13 @@ $Web::LangTag::Registry = {
                           'ggg' => {},
                           'ggk' => {},
                           'ggl' => {},
-                          'ggn' => {},
-                          'ggo' => {},
+                          'ggn' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'gvr'
+                                   },
+                          'ggo' => {
+                                     '_deprecated' => 1
+                                   },
                           'ggr' => {
                                      '_deprecated' => 1
                                    },
@@ -3837,6 +3965,7 @@ $Web::LangTag::Registry = {
                           'gib' => {},
                           'gic' => {},
                           'gid' => {},
+                          'gie' => {},
                           'gig' => {},
                           'gih' => {},
                           'gil' => {},
@@ -3859,8 +3988,10 @@ $Web::LangTag::Registry = {
                           'gjk' => {},
                           'gjm' => {},
                           'gjn' => {},
+                          'gjr' => {},
                           'gju' => {},
                           'gka' => {},
+                          'gkd' => {},
                           'gke' => {},
                           'gkn' => {},
                           'gko' => {},
@@ -3872,7 +4003,10 @@ $Web::LangTag::Registry = {
                           'glc' => {},
                           'gld' => {},
                           'glh' => {},
-                          'gli' => {},
+                          'gli' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'kzk'
+                                   },
                           'glj' => {},
                           'glk' => {},
                           'gll' => {},
@@ -3891,6 +4025,7 @@ $Web::LangTag::Registry = {
                           'gmm' => {},
                           'gmn' => {},
                           'gmq' => {},
+                          'gmr' => {},
                           'gmu' => {},
                           'gmv' => {},
                           'gmw' => {},
@@ -3908,6 +4043,7 @@ $Web::LangTag::Registry = {
                           'gng' => {},
                           'gnh' => {},
                           'gni' => {},
+                          'gnj' => {},
                           'gnk' => {},
                           'gnl' => {},
                           'gnm' => {},
@@ -4013,7 +4149,10 @@ $Web::LangTag::Registry = {
                           'gus' => {},
                           'gut' => {},
                           'guu' => {},
-                          'guv' => {},
+                          'guv' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'duz'
+                                   },
                           'guw' => {},
                           'gux' => {},
                           'guz' => {},
@@ -4060,6 +4199,7 @@ $Web::LangTag::Registry = {
                           'gyl' => {},
                           'gym' => {},
                           'gyn' => {},
+                          'gyo' => {},
                           'gyr' => {},
                           'gyy' => {},
                           'gza' => {},
@@ -4137,6 +4277,7 @@ $Web::LangTag::Registry = {
                           'hka' => {},
                           'hke' => {},
                           'hkk' => {},
+                          'hkn' => {},
                           'hks' => {},
                           'hla' => {},
                           'hlb' => {},
@@ -4172,6 +4313,7 @@ $Web::LangTag::Registry = {
                           'hna' => {},
                           'hnd' => {},
                           'hne' => {},
+                          'hng' => {},
                           'hnh' => {},
                           'hni' => {},
                           'hnj' => {},
@@ -4275,18 +4417,22 @@ $Web::LangTag::Registry = {
                                     '_suppress' => 'armn'
                                   },
                           'hya' => {},
+                          'hyw' => {},
                           'hyx' => {},
                           'hz' => {},
                           'ia' => {},
                           'iai' => {},
                           'ian' => {},
-                          'iap' => {},
+                          'iap' => {
+                                     '_deprecated' => 1
+                                   },
                           'iar' => {},
                           'iba' => {},
                           'ibb' => {},
                           'ibd' => {},
                           'ibe' => {},
                           'ibg' => {},
+                          'ibh' => {},
                           'ibi' => {
                                      '_deprecated' => 1,
                                      '_preferred' => 'opa'
@@ -4365,8 +4511,12 @@ $Web::LangTag::Registry = {
                           'ilg' => {},
                           'ili' => {},
                           'ilk' => {},
-                          'ill' => {},
+                          'ill' => {
+                                     '_deprecated' => 1
+                                   },
+                          'ilm' => {},
                           'ilo' => {},
+                          'ilp' => {},
                           'ils' => {},
                           'ilu' => {},
                           'ilv' => {},
@@ -4445,6 +4595,7 @@ $Web::LangTag::Registry = {
                                   },
                           'itb' => {},
                           'itc' => {},
+                          'itd' => {},
                           'ite' => {},
                           'iti' => {},
                           'itk' => {},
@@ -4526,7 +4677,10 @@ $Web::LangTag::Registry = {
                           'jdt' => {},
                           'jeb' => {},
                           'jee' => {},
-                          'jeg' => {},
+                          'jeg' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'oyb'
+                                   },
                           'jeh' => {},
                           'jei' => {},
                           'jek' => {},
@@ -4563,6 +4717,7 @@ $Web::LangTag::Registry = {
                           'jiy' => {},
                           'jje' => {},
                           'jjr' => {},
+                          'jka' => {},
                           'jkm' => {},
                           'jko' => {},
                           'jkp' => {},
@@ -4791,8 +4946,13 @@ $Web::LangTag::Registry = {
                           'kg' => {},
                           'kga' => {},
                           'kgb' => {},
-                          'kgc' => {},
-                          'kgd' => {},
+                          'kgc' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'tdf'
+                                   },
+                          'kgd' => {
+                                     '_deprecated' => 1
+                                   },
                           'kge' => {},
                           'kgf' => {},
                           'kgg' => {},
@@ -4872,7 +5032,9 @@ $Web::LangTag::Registry = {
                           'kjc' => {},
                           'kjd' => {},
                           'kje' => {},
-                          'kjf' => {},
+                          'kjf' => {
+                                     '_deprecated' => 1
+                                   },
                           'kjg' => {},
                           'kjh' => {},
                           'kji' => {},
@@ -5034,7 +5196,9 @@ $Web::LangTag::Registry = {
                           'kou' => {},
                           'kov' => {},
                           'kow' => {},
-                          'kox' => {},
+                          'kox' => {
+                                     '_deprecated' => 1
+                                   },
                           'koy' => {},
                           'koz' => {},
                           'kpa' => {},
@@ -5103,7 +5267,10 @@ $Web::LangTag::Registry = {
                           'krj' => {},
                           'krk' => {},
                           'krl' => {},
-                          'krm' => {},
+                          'krm' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'bmf'
+                                   },
                           'krn' => {},
                           'kro' => {},
                           'krp' => {},
@@ -5160,7 +5327,10 @@ $Web::LangTag::Registry = {
                           'kto' => {},
                           'ktp' => {},
                           'ktq' => {},
-                          'ktr' => {},
+                          'ktr' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'dtp'
+                                   },
                           'kts' => {},
                           'ktt' => {},
                           'ktu' => {},
@@ -5213,7 +5383,10 @@ $Web::LangTag::Registry = {
                           'kvp' => {},
                           'kvq' => {},
                           'kvr' => {},
-                          'kvs' => {},
+                          'kvs' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'gdj'
+                                   },
                           'kvt' => {},
                           'kvu' => {},
                           'kvv' => {},
@@ -5264,7 +5437,10 @@ $Web::LangTag::Registry = {
                           'kxi' => {},
                           'kxj' => {},
                           'kxk' => {},
-                          'kxl' => {},
+                          'kxl' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'kru'
+                                   },
                           'kxm' => {},
                           'kxn' => {},
                           'kxo' => {},
@@ -5273,7 +5449,9 @@ $Web::LangTag::Registry = {
                           'kxr' => {},
                           'kxs' => {},
                           'kxt' => {},
-                          'kxu' => {},
+                          'kxu' => {
+                                     '_deprecated' => 1
+                                   },
                           'kxv' => {},
                           'kxw' => {},
                           'kxx' => {},
@@ -5317,7 +5495,10 @@ $Web::LangTag::Registry = {
                                      '_deprecated' => 1
                                    },
                           'kzi' => {},
-                          'kzj' => {},
+                          'kzj' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'dtp'
+                                   },
                           'kzk' => {},
                           'kzl' => {},
                           'kzm' => {},
@@ -5327,7 +5508,10 @@ $Web::LangTag::Registry = {
                           'kzq' => {},
                           'kzr' => {},
                           'kzs' => {},
-                          'kzt' => {},
+                          'kzt' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'dtp'
+                                   },
                           'kzu' => {},
                           'kzv' => {},
                           'kzw' => {},
@@ -5363,7 +5547,9 @@ $Web::LangTag::Registry = {
                           'lb' => {
                                     '_suppress' => 'latn'
                                   },
-                          'lba' => {},
+                          'lba' => {
+                                     '_deprecated' => 1
+                                   },
                           'lbb' => {},
                           'lbc' => {},
                           'lbe' => {},
@@ -5530,7 +5716,10 @@ $Web::LangTag::Registry = {
                           'lll' => {},
                           'llm' => {},
                           'lln' => {},
-                          'llo' => {},
+                          'llo' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'ngt'
+                                   },
                           'llp' => {},
                           'llq' => {},
                           'lls' => {},
@@ -5562,7 +5751,9 @@ $Web::LangTag::Registry = {
                           'lmw' => {},
                           'lmx' => {},
                           'lmy' => {},
-                          'lmz' => {},
+                          'lmz' => {
+                                     '_deprecated' => 1
+                                   },
                           'ln' => {
                                     '_suppress' => 'latn'
                                   },
@@ -5631,22 +5822,27 @@ $Web::LangTag::Registry = {
                           'lsa' => {},
                           'lsd' => {},
                           'lse' => {},
-                          'lsg' => {},
+                          'lsg' => {
+                                     '_deprecated' => 1
+                                   },
                           'lsh' => {},
                           'lsi' => {},
                           'lsl' => {},
                           'lsm' => {},
+                          'lsn' => {},
                           'lso' => {},
                           'lsp' => {},
                           'lsr' => {},
                           'lss' => {},
                           'lst' => {},
+                          'lsv' => {},
                           'lsy' => {},
                           'lt' => {
                                     '_suppress' => 'latn'
                                   },
                           'ltc' => {},
                           'ltg' => {},
+                          'lth' => {},
                           'lti' => {},
                           'ltn' => {},
                           'lto' => {},
@@ -5679,6 +5875,7 @@ $Web::LangTag::Registry = {
                                     '_suppress' => 'latn'
                                   },
                           'lva' => {},
+                          'lvi' => {},
                           'lvk' => {},
                           'lvs' => {},
                           'lvu' => {},
@@ -5689,6 +5886,7 @@ $Web::LangTag::Registry = {
                           'lwl' => {},
                           'lwm' => {},
                           'lwo' => {},
+                          'lws' => {},
                           'lwt' => {},
                           'lwu' => {},
                           'lww' => {},
@@ -5943,6 +6141,7 @@ $Web::LangTag::Registry = {
                           'mja' => {
                                      '_deprecated' => 1
                                    },
+                          'mjb' => {},
                           'mjc' => {},
                           'mjd' => {},
                           'mje' => {},
@@ -6319,8 +6518,12 @@ $Web::LangTag::Registry = {
                           'mwu' => {},
                           'mwv' => {},
                           'mww' => {},
-                          'mwx' => {},
-                          'mwy' => {},
+                          'mwx' => {
+                                     '_deprecated' => 1
+                                   },
+                          'mwy' => {
+                                     '_deprecated' => 1
+                                   },
                           'mwz' => {},
                           'mxa' => {},
                           'mxb' => {},
@@ -6353,12 +6556,17 @@ $Web::LangTag::Registry = {
                                   },
                           'myb' => {},
                           'myc' => {},
-                          'myd' => {},
+                          'myd' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'aog'
+                                   },
                           'mye' => {},
                           'myf' => {},
                           'myg' => {},
                           'myh' => {},
-                          'myi' => {},
+                          'myi' => {
+                                     '_deprecated' => 1
+                                   },
                           'myj' => {},
                           'myk' => {},
                           'myl' => {},
@@ -6412,7 +6620,10 @@ $Web::LangTag::Registry = {
                           'naa' => {},
                           'nab' => {},
                           'nac' => {},
-                          'nad' => {},
+                          'nad' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'xny'
+                                   },
                           'nae' => {},
                           'naf' => {},
                           'nag' => {},
@@ -6479,7 +6690,11 @@ $Web::LangTag::Registry = {
                           'ncm' => {},
                           'ncn' => {},
                           'nco' => {},
-                          'ncp' => {},
+                          'ncp' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'kdz'
+                                   },
+                          'ncq' => {},
                           'ncr' => {},
                           'ncs' => {},
                           'nct' => {},
@@ -6676,6 +6891,7 @@ $Web::LangTag::Registry = {
                           'nlj' => {},
                           'nlk' => {},
                           'nll' => {},
+                          'nlm' => {},
                           'nln' => {
                                      '_deprecated' => 1
                                    },
@@ -6736,7 +6952,10 @@ $Web::LangTag::Registry = {
                           'nnp' => {},
                           'nnq' => {},
                           'nnr' => {},
-                          'nns' => {},
+                          'nns' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'nbr'
+                                   },
                           'nnt' => {},
                           'nnu' => {},
                           'nnv' => {},
@@ -6785,9 +7004,11 @@ $Web::LangTag::Registry = {
                           'npo' => {},
                           'nps' => {},
                           'npu' => {},
+                          'npx' => {},
                           'npy' => {},
                           'nqg' => {},
                           'nqk' => {},
+                          'nql' => {},
                           'nqm' => {},
                           'nqn' => {},
                           'nqo' => {
@@ -6816,6 +7037,7 @@ $Web::LangTag::Registry = {
                           'nrx' => {},
                           'nrz' => {},
                           'nsa' => {},
+                          'nsb' => {},
                           'nsc' => {},
                           'nsd' => {},
                           'nse' => {},
@@ -6841,6 +7063,7 @@ $Web::LangTag::Registry = {
                           'nsx' => {},
                           'nsy' => {},
                           'nsz' => {},
+                          'ntd' => {},
                           'nte' => {},
                           'ntg' => {},
                           'nti' => {},
@@ -6850,7 +7073,10 @@ $Web::LangTag::Registry = {
                           'nto' => {},
                           'ntp' => {},
                           'ntr' => {},
-                          'nts' => {},
+                          'nts' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'pij'
+                                   },
                           'ntu' => {},
                           'ntw' => {},
                           'ntx' => {},
@@ -6909,7 +7135,10 @@ $Web::LangTag::Registry = {
                           'nxo' => {},
                           'nxq' => {},
                           'nxr' => {},
-                          'nxu' => {},
+                          'nxu' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'bpp'
+                                   },
                           'nxx' => {},
                           'ny' => {
                                     '_suppress' => 'latn'
@@ -6940,6 +7169,7 @@ $Web::LangTag::Registry = {
                           'nyy' => {},
                           'nza' => {},
                           'nzb' => {},
+                          'nzd' => {},
                           'nzi' => {},
                           'nzk' => {},
                           'nzm' => {},
@@ -7015,13 +7245,16 @@ $Web::LangTag::Registry = {
                           'olo' => {},
                           'olr' => {},
                           'olt' => {},
+                          'olu' => {},
                           'om' => {
                                     '_suppress' => 'latn'
                                   },
                           'oma' => {},
                           'omb' => {},
                           'omc' => {},
-                          'ome' => {},
+                          'ome' => {
+                                     '_deprecated' => 1
+                                   },
                           'omg' => {},
                           'omi' => {},
                           'omk' => {},
@@ -7119,6 +7352,7 @@ $Web::LangTag::Registry = {
                                      '_deprecated' => 1,
                                      '_preferred' => 'vaj'
                                    },
+                          'ovd' => {},
                           'owi' => {},
                           'owl' => {},
                           'oyb' => {},
@@ -7161,6 +7395,7 @@ $Web::LangTag::Registry = {
                           'pbh' => {},
                           'pbi' => {},
                           'pbl' => {},
+                          'pbm' => {},
                           'pbn' => {},
                           'pbo' => {},
                           'pbp' => {},
@@ -7235,6 +7470,7 @@ $Web::LangTag::Registry = {
                           'pgy' => {
                                      '_deprecated' => 1
                                    },
+                          'pgz' => {},
                           'pha' => {},
                           'phd' => {},
                           'phg' => {},
@@ -7305,7 +7541,9 @@ $Web::LangTag::Registry = {
                           'pll' => {},
                           'pln' => {},
                           'plo' => {},
-                          'plp' => {},
+                          'plp' => {
+                                     '_deprecated' => 1
+                                   },
                           'plq' => {},
                           'plr' => {},
                           'pls' => {},
@@ -7317,7 +7555,10 @@ $Web::LangTag::Registry = {
                           'plz' => {},
                           'pma' => {},
                           'pmb' => {},
-                          'pmc' => {},
+                          'pmc' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'huw'
+                                   },
                           'pmd' => {},
                           'pme' => {},
                           'pmf' => {},
@@ -7344,6 +7585,7 @@ $Web::LangTag::Registry = {
                           'pna' => {},
                           'pnb' => {},
                           'pnc' => {},
+                          'pnd' => {},
                           'pne' => {},
                           'png' => {},
                           'pnh' => {},
@@ -7366,7 +7608,9 @@ $Web::LangTag::Registry = {
                           'pny' => {},
                           'pnz' => {},
                           'poc' => {},
-                          'pod' => {},
+                          'pod' => {
+                                     '_deprecated' => 1
+                                   },
                           'poe' => {},
                           'pof' => {},
                           'pog' => {},
@@ -7385,7 +7629,10 @@ $Web::LangTag::Registry = {
                           'pox' => {},
                           'poy' => {},
                           'poz' => {},
-                          'ppa' => {},
+                          'ppa' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'bfy'
+                                   },
                           'ppe' => {},
                           'ppi' => {},
                           'ppk' => {},
@@ -7407,7 +7654,9 @@ $Web::LangTag::Registry = {
                           'pqm' => {},
                           'pqw' => {},
                           'pra' => {},
-                          'prb' => {},
+                          'prb' => {
+                                     '_deprecated' => 1
+                                   },
                           'prc' => {},
                           'prd' => {},
                           'pre' => {},
@@ -7428,7 +7677,10 @@ $Web::LangTag::Registry = {
                           'pru' => {},
                           'prw' => {},
                           'prx' => {},
-                          'pry' => {},
+                          'pry' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'prt'
+                                   },
                           'prz' => {},
                           'ps' => {
                                     '_suppress' => 'arab'
@@ -7477,7 +7729,9 @@ $Web::LangTag::Registry = {
                           'pug' => {},
                           'pui' => {},
                           'puj' => {},
-                          'puk' => {},
+                          'puk' => {
+                                     '_deprecated' => 1
+                                   },
                           'pum' => {},
                           'puo' => {},
                           'pup' => {},
@@ -8145,7 +8399,9 @@ $Web::LangTag::Registry = {
                           'rhg' => {},
                           'rhp' => {},
                           'ria' => {},
-                          'rie' => {},
+                          'rie' => {
+                                     '_deprecated' => 1
+                                   },
                           'rif' => {},
                           'ril' => {},
                           'rim' => {},
@@ -8196,7 +8452,9 @@ $Web::LangTag::Registry = {
                           'rn' => {
                                     '_suppress' => 'latn'
                                   },
-                          'rna' => {},
+                          'rna' => {
+                                     '_deprecated' => 1
+                                   },
                           'rnd' => {},
                           'rng' => {},
                           'rnl' => {},
@@ -8227,8 +8485,11 @@ $Web::LangTag::Registry = {
                           'rro' => {},
                           'rrt' => {},
                           'rsb' => {},
-                          'rsi' => {},
+                          'rsi' => {
+                                     '_deprecated' => 1
+                                   },
                           'rsl' => {},
+                          'rsm' => {},
                           'rtc' => {},
                           'rth' => {},
                           'rtm' => {},
@@ -8265,6 +8526,7 @@ $Web::LangTag::Registry = {
                           'ryn' => {},
                           'rys' => {},
                           'ryu' => {},
+                          'rzh' => {},
                           'sa' => {},
                           'saa' => {},
                           'sab' => {},
@@ -8336,6 +8598,7 @@ $Web::LangTag::Registry = {
                           'scp' => {},
                           'scq' => {},
                           'scs' => {},
+                          'sct' => {},
                           'scu' => {},
                           'scv' => {},
                           'scw' => {},
@@ -8351,10 +8614,13 @@ $Web::LangTag::Registry = {
                           'sdj' => {},
                           'sdk' => {},
                           'sdl' => {},
-                          'sdm' => {},
+                          'sdm' => {
+                                     '_deprecated' => 1
+                                   },
                           'sdn' => {},
                           'sdo' => {},
                           'sdp' => {},
+                          'sdq' => {},
                           'sdr' => {},
                           'sds' => {},
                           'sdt' => {},
@@ -8505,7 +8771,10 @@ $Web::LangTag::Registry = {
                           'skh' => {},
                           'ski' => {},
                           'skj' => {},
-                          'skk' => {},
+                          'skk' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'oyb'
+                                   },
                           'skm' => {},
                           'skn' => {},
                           'sko' => {},
@@ -8578,7 +8847,9 @@ $Web::LangTag::Registry = {
                           'sne' => {},
                           'snf' => {},
                           'sng' => {},
-                          'snh' => {},
+                          'snh' => {
+                                     '_deprecated' => 1
+                                   },
                           'sni' => {},
                           'snj' => {},
                           'snk' => {},
@@ -8768,7 +9039,9 @@ $Web::LangTag::Registry = {
                           'sve' => {},
                           'svk' => {},
                           'svm' => {},
-                          'svr' => {},
+                          'svr' => {
+                                     '_deprecated' => 1
+                                   },
                           'svs' => {},
                           'svx' => {},
                           'sw' => {
@@ -8833,8 +9106,10 @@ $Web::LangTag::Registry = {
                           'szl' => {},
                           'szn' => {},
                           'szp' => {},
+                          'szs' => {},
                           'szv' => {},
                           'szw' => {},
+                          'szy' => {},
                           'ta' => {
                                     '_suppress' => 'taml'
                                   },
@@ -8862,7 +9137,9 @@ $Web::LangTag::Registry = {
                           'tay' => {},
                           'taz' => {},
                           'tba' => {},
-                          'tbb' => {},
+                          'tbb' => {
+                                     '_deprecated' => 1
+                                   },
                           'tbc' => {},
                           'tbd' => {},
                           'tbe' => {},
@@ -8922,13 +9199,17 @@ $Web::LangTag::Registry = {
                           'tdj' => {},
                           'tdk' => {},
                           'tdl' => {},
+                          'tdm' => {},
                           'tdn' => {},
                           'tdo' => {},
                           'tdq' => {},
                           'tdr' => {},
                           'tds' => {},
                           'tdt' => {},
-                          'tdu' => {},
+                          'tdu' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'dtp'
+                                   },
                           'tdv' => {},
                           'tdx' => {},
                           'tdy' => {},
@@ -8960,6 +9241,7 @@ $Web::LangTag::Registry = {
                           'tew' => {},
                           'tex' => {},
                           'tey' => {},
+                          'tez' => {},
                           'tfi' => {},
                           'tfn' => {},
                           'tfo' => {},
@@ -8994,7 +9276,10 @@ $Web::LangTag::Registry = {
                           'th' => {
                                     '_suppress' => 'thai'
                                   },
-                          'thc' => {},
+                          'thc' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'tpo'
+                                   },
                           'thd' => {},
                           'the' => {},
                           'thf' => {},
@@ -9023,7 +9308,9 @@ $Web::LangTag::Registry = {
                                   },
                           'tia' => {},
                           'tic' => {},
-                          'tid' => {},
+                          'tid' => {
+                                     '_deprecated' => 1
+                                   },
                           'tie' => {
                                      '_deprecated' => 1,
                                      '_preferred' => 'ras'
@@ -9051,10 +9338,12 @@ $Web::LangTag::Registry = {
                           'tja' => {},
                           'tjg' => {},
                           'tji' => {},
+                          'tjj' => {},
                           'tjl' => {},
                           'tjm' => {},
                           'tjn' => {},
                           'tjo' => {},
+                          'tjp' => {},
                           'tjs' => {},
                           'tju' => {},
                           'tjw' => {},
@@ -9131,7 +9420,10 @@ $Web::LangTag::Registry = {
                           'tmm' => {},
                           'tmn' => {},
                           'tmo' => {},
-                          'tmp' => {},
+                          'tmp' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'tyj'
+                                   },
                           'tmq' => {},
                           'tmr' => {},
                           'tms' => {},
@@ -9148,7 +9440,10 @@ $Web::LangTag::Registry = {
                           'tnb' => {},
                           'tnc' => {},
                           'tnd' => {},
-                          'tne' => {},
+                          'tne' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'kak'
+                                   },
                           'tnf' => {
                                      '_deprecated' => 1,
                                      '_preferred' => 'prs'
@@ -9178,7 +9473,9 @@ $Web::LangTag::Registry = {
                           'tob' => {},
                           'toc' => {},
                           'tod' => {},
-                          'toe' => {},
+                          'toe' => {
+                                     '_deprecated' => 1
+                                   },
                           'tof' => {},
                           'tog' => {},
                           'toh' => {},
@@ -9355,6 +9652,7 @@ $Web::LangTag::Registry = {
                           'tvt' => {},
                           'tvu' => {},
                           'tvw' => {},
+                          'tvx' => {},
                           'tvy' => {},
                           'tw' => {},
                           'twa' => {},
@@ -9456,11 +9754,14 @@ $Web::LangTag::Registry = {
                           'uka' => {},
                           'ukg' => {},
                           'ukh' => {},
+                          'uki' => {},
+                          'ukk' => {},
                           'ukl' => {},
                           'ukp' => {},
                           'ukq' => {},
                           'uks' => {},
                           'uku' => {},
+                          'ukv' => {},
                           'ukw' => {},
                           'uky' => {},
                           'ula' => {},
@@ -9539,9 +9840,11 @@ $Web::LangTag::Registry = {
                           'usi' => {},
                           'usk' => {},
                           'usp' => {},
+                          'uss' => {},
                           'usu' => {},
                           'uta' => {},
                           'ute' => {},
+                          'uth' => {},
                           'utp' => {},
                           'utr' => {},
                           'utu' => {},
@@ -9693,6 +9996,7 @@ $Web::LangTag::Registry = {
                           'wbp' => {},
                           'wbq' => {},
                           'wbr' => {},
+                          'wbs' => {},
                           'wbt' => {},
                           'wbv' => {},
                           'wbw' => {},
@@ -9762,6 +10066,7 @@ $Web::LangTag::Registry = {
                           'wkb' => {},
                           'wkd' => {},
                           'wkl' => {},
+                          'wkr' => {},
                           'wku' => {},
                           'wkw' => {},
                           'wky' => {},
@@ -9769,6 +10074,7 @@ $Web::LangTag::Registry = {
                           'wlc' => {},
                           'wle' => {},
                           'wlg' => {},
+                          'wlh' => {},
                           'wli' => {},
                           'wlk' => {},
                           'wll' => {},
@@ -9848,6 +10154,7 @@ $Web::LangTag::Registry = {
                           'wry' => {},
                           'wrz' => {},
                           'wsa' => {},
+                          'wsg' => {},
                           'wsi' => {},
                           'wsk' => {},
                           'wsr' => {},
@@ -9894,6 +10201,7 @@ $Web::LangTag::Registry = {
                           'xag' => {},
                           'xai' => {},
                           'xaj' => {},
+                          'xak' => {},
                           'xal' => {},
                           'xam' => {},
                           'xan' => {},
@@ -9907,7 +10215,10 @@ $Web::LangTag::Registry = {
                           'xav' => {},
                           'xaw' => {},
                           'xay' => {},
-                          'xba' => {},
+                          'xba' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'cax'
+                                   },
                           'xbb' => {},
                           'xbc' => {},
                           'xbd' => {},
@@ -9921,7 +10232,9 @@ $Web::LangTag::Registry = {
                           'xbp' => {},
                           'xbr' => {},
                           'xbw' => {},
-                          'xbx' => {},
+                          'xbx' => {
+                                     '_deprecated' => 1
+                                   },
                           'xby' => {},
                           'xcb' => {},
                           'xcc' => {},
@@ -9942,6 +10255,7 @@ $Web::LangTag::Registry = {
                           'xdc' => {},
                           'xdk' => {},
                           'xdm' => {},
+                          'xdo' => {},
                           'xdy' => {},
                           'xeb' => {},
                           'xed' => {},
@@ -9985,7 +10299,9 @@ $Web::LangTag::Registry = {
                           'xii' => {},
                           'xil' => {},
                           'xin' => {},
-                          'xip' => {},
+                          'xip' => {
+                                     '_deprecated' => 1
+                                   },
                           'xir' => {},
                           'xis' => {},
                           'xiv' => {},
@@ -9999,7 +10315,10 @@ $Web::LangTag::Registry = {
                           'xke' => {},
                           'xkf' => {},
                           'xkg' => {},
-                          'xkh' => {},
+                          'xkh' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'waw'
+                                   },
                           'xki' => {},
                           'xkj' => {},
                           'xkk' => {},
@@ -10062,6 +10381,7 @@ $Web::LangTag::Registry = {
                           'xnh' => {},
                           'xni' => {},
                           'xnk' => {},
+                          'xnm' => {},
                           'xnn' => {},
                           'xno' => {},
                           'xnr' => {},
@@ -10082,12 +10402,17 @@ $Web::LangTag::Registry = {
                           'xor' => {},
                           'xow' => {},
                           'xpa' => {},
+                          'xpb' => {},
                           'xpc' => {},
+                          'xpd' => {},
                           'xpe' => {},
+                          'xpf' => {},
                           'xpg' => {},
+                          'xph' => {},
                           'xpi' => {},
                           'xpj' => {},
                           'xpk' => {},
+                          'xpl' => {},
                           'xpm' => {},
                           'xpn' => {},
                           'xpo' => {},
@@ -10097,7 +10422,11 @@ $Web::LangTag::Registry = {
                           'xps' => {},
                           'xpt' => {},
                           'xpu' => {},
+                          'xpv' => {},
+                          'xpw' => {},
+                          'xpx' => {},
                           'xpy' => {},
+                          'xpz' => {},
                           'xqa' => {},
                           'xqt' => {},
                           'xra' => {},
@@ -10108,7 +10437,10 @@ $Web::LangTag::Registry = {
                           'xri' => {},
                           'xrm' => {},
                           'xrn' => {},
-                          'xrq' => {},
+                          'xrq' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'dmw'
+                                   },
                           'xrr' => {},
                           'xrt' => {},
                           'xru' => {},
@@ -10120,10 +10452,7 @@ $Web::LangTag::Registry = {
                           'xse' => {},
                           'xsh' => {},
                           'xsi' => {},
-                          'xsj' => {
-                                     '_deprecated' => 1,
-                                     '_preferred' => 'suj'
-                                   },
+                          'xsj' => {},
                           'xsl' => {},
                           'xsm' => {},
                           'xsn' => {},
@@ -10157,7 +10486,9 @@ $Web::LangTag::Registry = {
                           'xtv' => {},
                           'xtw' => {},
                           'xty' => {},
-                          'xtz' => {},
+                          'xtz' => {
+                                     '_deprecated' => 1
+                                   },
                           'xua' => {},
                           'xub' => {},
                           'xud' => {},
@@ -10403,11 +10734,14 @@ $Web::LangTag::Registry = {
                           'yra' => {},
                           'yrb' => {},
                           'yre' => {},
-                          'yri' => {},
+                          'yri' => {
+                                     '_deprecated' => 1
+                                   },
                           'yrk' => {},
                           'yrl' => {},
                           'yrm' => {},
                           'yrn' => {},
+                          'yro' => {},
                           'yrs' => {},
                           'yrw' => {},
                           'yry' => {},
@@ -10499,6 +10833,7 @@ $Web::LangTag::Registry = {
                           'zax' => {},
                           'zay' => {},
                           'zaz' => {},
+                          'zba' => {},
                           'zbc' => {},
                           'zbe' => {},
                           'zbl' => {
@@ -10532,7 +10867,10 @@ $Web::LangTag::Registry = {
                           'zil' => {},
                           'zim' => {},
                           'zin' => {},
-                          'zir' => {},
+                          'zir' => {
+                                     '_deprecated' => 1,
+                                     '_preferred' => 'scv'
+                                   },
                           'ziw' => {},
                           'ziz' => {},
                           'zka' => {},
@@ -11005,6 +11343,9 @@ $Web::LangTag::Registry = {
                         '155' => {
                                    '_canon' => '155'
                                  },
+                        '202' => {
+                                   '_canon' => '202'
+                                 },
                         '419' => {
                                    '_canon' => '419'
                                  },
@@ -11249,6 +11590,9 @@ $Web::LangTag::Registry = {
                                   '_canon' => '_uppercase'
                                 },
                         'eu' => {
+                                  '_canon' => '_uppercase'
+                                },
+                        'ez' => {
                                   '_canon' => '_uppercase'
                                 },
                         'fi' => {
@@ -11806,6 +12150,9 @@ $Web::LangTag::Registry = {
                         'um' => {
                                   '_canon' => '_uppercase'
                                 },
+                        'un' => {
+                                  '_canon' => '_uppercase'
+                                },
                         'us' => {
                                   '_canon' => '_uppercase'
                                 },
@@ -12032,10 +12379,16 @@ $Web::LangTag::Registry = {
                         'cher' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'chrs' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'cirt' => {
                                     '_canon' => '_titlecase'
                                   },
                         'copt' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'cpmn' => {
                                     '_canon' => '_titlecase'
                                   },
                         'cprt' => {
@@ -12048,6 +12401,12 @@ $Web::LangTag::Registry = {
                                     '_canon' => '_titlecase'
                                   },
                         'deva' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'diak' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'dogr' => {
                                     '_canon' => '_titlecase'
                                   },
                         'dsrt' => {
@@ -12068,6 +12427,9 @@ $Web::LangTag::Registry = {
                         'elba' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'elym' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'ethi' => {
                                     '_canon' => '_titlecase'
                                   },
@@ -12078,6 +12440,12 @@ $Web::LangTag::Registry = {
                                     '_canon' => '_titlecase'
                                   },
                         'glag' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'gong' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'gonm' => {
                                     '_canon' => '_titlecase'
                                   },
                         'goth' => {
@@ -12126,6 +12494,9 @@ $Web::LangTag::Registry = {
                                     '_canon' => '_titlecase'
                                   },
                         'hmng' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'hmnp' => {
                                     '_canon' => '_titlecase'
                                   },
                         'hrkt' => {
@@ -12230,6 +12601,9 @@ $Web::LangTag::Registry = {
                         'mahj' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'maka' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'mand' => {
                                     '_canon' => '_titlecase'
                                   },
@@ -12240,6 +12614,9 @@ $Web::LangTag::Registry = {
                                     '_canon' => '_titlecase'
                                   },
                         'maya' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'medf' => {
                                     '_canon' => '_titlecase'
                                   },
                         'mend' => {
@@ -12275,6 +12652,9 @@ $Web::LangTag::Registry = {
                         'mymr' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'nand' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'narb' => {
                                     '_canon' => '_titlecase'
                                   },
@@ -12282,6 +12662,9 @@ $Web::LangTag::Registry = {
                                     '_canon' => '_titlecase'
                                   },
                         'newa' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'nkdb' => {
                                     '_canon' => '_titlecase'
                                   },
                         'nkgb' => {
@@ -12497,6 +12880,9 @@ $Web::LangTag::Registry = {
                         'rjng' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'rohg' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'roro' => {
                                     '_canon' => '_titlecase'
                                   },
@@ -12524,6 +12910,9 @@ $Web::LangTag::Registry = {
                         'shrd' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'shui' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'sidd' => {
                                     '_canon' => '_titlecase'
                                   },
@@ -12533,7 +12922,16 @@ $Web::LangTag::Registry = {
                         'sinh' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'sogd' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'sogo' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'sora' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'soyo' => {
                                     '_canon' => '_titlecase'
                                   },
                         'sund' => {
@@ -12611,6 +13009,9 @@ $Web::LangTag::Registry = {
                         'wara' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'wcho' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'wole' => {
                                     '_canon' => '_titlecase'
                                   },
@@ -12620,7 +13021,13 @@ $Web::LangTag::Registry = {
                         'xsux' => {
                                     '_canon' => '_titlecase'
                                   },
+                        'yezi' => {
+                                    '_canon' => '_titlecase'
+                                  },
                         'yiii' => {
+                                    '_canon' => '_titlecase'
+                                  },
+                        'zanb' => {
                                     '_canon' => '_titlecase'
                                   },
                         'zinh' => {
@@ -12666,7 +13073,11 @@ $Web::LangTag::Registry = {
                       'publish' => {},
                       'remove' => {},
                       'title' => {},
-                      'upper' => {}
+                      'upper' => {},
+                      'zawgyi' => {}
+                    },
+          't_h0' => {
+                      'hybrid' => {}
                     },
           't_i0' => {
                       'handwrit' => {},
@@ -12707,6 +13118,7 @@ $Web::LangTag::Registry = {
                     },
           't_key' => {
                        'd0' => {},
+                       'h0' => {},
                        'i0' => {},
                        'k0' => {},
                        'm0' => {},
@@ -12723,7 +13135,9 @@ $Web::LangTag::Registry = {
                       'c11' => {},
                       'css' => {},
                       'din' => {},
+                      'ewts' => {},
                       'gost' => {},
+                      'iast' => {},
                       'iso' => {},
                       'java' => {},
                       'mcst' => {},
@@ -12743,7 +13157,8 @@ $Web::LangTag::Registry = {
                       'ascii' => {},
                       'hex' => {},
                       'npinyin' => {},
-                      'publish' => {}
+                      'publish' => {},
+                      'zawgyi' => {}
                     },
           't_t0' => {
                       'und' => {}
@@ -12854,6 +13269,7 @@ $Web::LangTag::Registry = {
                       'buk' => {},
                       'bwp' => {},
                       'byb' => {},
+                      'byn' => {},
                       'byr' => {},
                       'bzd' => {},
                       'cad' => {},
@@ -12864,6 +13280,7 @@ $Web::LangTag::Registry = {
                       'cle' => {},
                       'clf' => {},
                       'clp' => {},
+                      'cnh' => {},
                       'cnx' => {},
                       'cny' => {},
                       'cop' => {},
@@ -12969,6 +13386,7 @@ $Web::LangTag::Registry = {
                       'mnt' => {},
                       'mop' => {},
                       'mro' => {},
+                      'mru' => {},
                       'mtl' => {},
                       'mtp' => {},
                       'mur' => {},
@@ -13027,6 +13445,7 @@ $Web::LangTag::Registry = {
                       'srg' => {},
                       'ssp' => {},
                       'std' => {},
+                      'stn' => {},
                       'sur' => {},
                       'svc' => {},
                       'syp' => {},
@@ -13054,9 +13473,11 @@ $Web::LangTag::Registry = {
                       'uyi' => {},
                       'uyp' => {},
                       'uyu' => {},
+                      'uyw' => {},
                       'uzs' => {},
                       'veb' => {},
                       'vef' => {},
+                      'ves' => {},
                       'vnd' => {},
                       'vnn' => {},
                       'vuv' => {},
@@ -13252,6 +13673,7 @@ $Web::LangTag::Registry = {
                       'ussystem' => {}
                     },
           'u_nu' => {
+                      'adlm' => {},
                       'ahom' => {},
                       'arab' => {},
                       'arabext' => {},
@@ -13259,15 +13681,19 @@ $Web::LangTag::Registry = {
                       'armnlow' => {},
                       'bali' => {},
                       'beng' => {},
+                      'bhks' => {},
                       'brah' => {},
                       'cakm' => {},
                       'cham' => {},
                       'cyrl' => {},
                       'deva' => {},
+                      'diak' => {},
                       'ethi' => {},
                       'finance' => {},
                       'fullwide' => {},
                       'geor' => {},
+                      'gong' => {},
+                      'gonm' => {},
                       'grek' => {},
                       'greklow' => {},
                       'gujr' => {},
@@ -13280,9 +13706,11 @@ $Web::LangTag::Registry = {
                       'hantfin' => {},
                       'hebr' => {},
                       'hmng' => {},
+                      'hmnp' => {},
                       'java' => {},
                       'jpan' => {},
                       'jpanfin' => {},
+                      'jpanyear' => {},
                       'kali' => {},
                       'khmr' => {},
                       'knda' => {},
@@ -13306,13 +13734,16 @@ $Web::LangTag::Registry = {
                       'mymrshan' => {},
                       'mymrtlng' => {},
                       'native' => {},
+                      'newa' => {},
                       'nkoo' => {},
                       'olck' => {},
                       'orya' => {},
                       'osma' => {},
+                      'rohg' => {},
                       'roman' => {},
                       'romanlow' => {},
                       'saur' => {},
+                      'segment' => {},
                       'shrd' => {},
                       'sind' => {},
                       'sinh' => {},
@@ -13328,7 +13759,8 @@ $Web::LangTag::Registry = {
                       'tirh' => {},
                       'traditio' => {},
                       'vaii' => {},
-                      'wara' => {}
+                      'wara' => {},
+                      'wcho' => {}
                     },
           'u_ss' => {
                       'none' => {},
@@ -13461,6 +13893,7 @@ $Web::LangTag::Registry = {
                       'ciabj' => {},
                       'ckrar' => {},
                       'clipc' => {},
+                      'clpuq' => {},
                       'clscl' => {},
                       'cmdla' => {},
                       'cnckg' => {
@@ -13483,6 +13916,7 @@ $Web::LangTag::Registry = {
                       'cuhav' => {},
                       'cvrai' => {},
                       'cxxch' => {},
+                      'cyfmg' => {},
                       'cynic' => {},
                       'czprg' => {},
                       'deber' => {},
@@ -13526,6 +13960,7 @@ $Web::LangTag::Registry = {
                       'globy' => {},
                       'glthu' => {},
                       'gmbjl' => {},
+                      'gmt' => {},
                       'gncky' => {},
                       'gpbbr' => {},
                       'gpmsb' => {},
@@ -13575,6 +14010,8 @@ $Web::LangTag::Registry = {
                       'kzaau' => {},
                       'kzakx' => {},
                       'kzala' => {},
+                      'kzguw' => {},
+                      'kzksn' => {},
                       'kzkzo' => {},
                       'kzura' => {},
                       'lavte' => {},
@@ -13679,6 +14116,7 @@ $Web::LangTag::Registry = {
                       'ruoms' => {},
                       'ruovb' => {},
                       'rupkc' => {},
+                      'rurtw' => {},
                       'rusred' => {},
                       'rutof' => {},
                       'ruuly' => {},
@@ -13863,6 +14301,11 @@ $Web::LangTag::Registry = {
                                                     ],
                                         '_canon' => 'abl1943'
                                       },
+                         'akuapem' => {
+                                        'Prefix' => [
+                                                      'tw'
+                                                    ]
+                                      },
                          'alalc97' => {
                                         '_canon' => 'alalc97'
                                       },
@@ -13878,16 +14321,33 @@ $Web::LangTag::Registry = {
                                                    ],
                                        '_canon' => 'ao1990'
                                      },
+                         'aranes' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
                          'arevela' => {
                                         'Prefix' => [
                                                       'hy'
-                                                    ]
+                                                    ],
+                                        '_deprecated' => 1
                                       },
                          'arevmda' => {
                                         'Prefix' => [
                                                       'hy'
-                                                    ]
+                                                    ],
+                                        '_deprecated' => 1
                                       },
+                         'asante' => {
+                                       'Prefix' => [
+                                                     'tw'
+                                                   ]
+                                     },
+                         'auvern' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
                          'baku1926' => {
                                          'Prefix' => [
                                                        'crh',
@@ -13943,6 +14403,16 @@ $Web::LangTag::Registry = {
                                                     'en'
                                                   ]
                                     },
+                         'bornholm' => {
+                                         'Prefix' => [
+                                                       'da'
+                                                     ]
+                                       },
+                         'cisaup' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
                          'colb1945' => {
                                          'Prefix' => [
                                                        'pt'
@@ -13954,6 +14424,11 @@ $Web::LangTag::Registry = {
                                                     'en'
                                                   ]
                                     },
+                         'creiss' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
                          'dajnko' => {
                                        'Prefix' => [
                                                      'sl'
@@ -13972,8 +14447,30 @@ $Web::LangTag::Registry = {
                                                     ]
                                       },
                          'fonipa' => {},
+                         'fonkirsh' => {},
+                         'fonnapa' => {},
                          'fonupa' => {},
                          'fonxsamp' => {},
+                         'gascon' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
+                         'grclass' => {
+                                        'Prefix' => [
+                                                      'oc'
+                                                    ]
+                                      },
+                         'grital' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
+                         'grmistr' => {
+                                        'Prefix' => [
+                                                      'oc'
+                                                    ]
+                                      },
                          'hepburn' => {
                                         'Prefix' => [
                                                       'ja-latn'
@@ -13991,6 +14488,11 @@ $Web::LangTag::Registry = {
                                                        'nn'
                                                      ]
                                        },
+                         'hsistemo' => {
+                                         'Prefix' => [
+                                                       'eo'
+                                                     ]
+                                       },
                          'ijekavsk' => {
                                          'Prefix' => [
                                                        'sr-cyrl',
@@ -14003,6 +14505,11 @@ $Web::LangTag::Registry = {
                                                       'sa'
                                                     ]
                                       },
+                         'ivanchov' => {
+                                         'Prefix' => [
+                                                       'bg'
+                                                     ]
+                                       },
                          'jauer' => {
                                       'Prefix' => [
                                                     'rm'
@@ -14033,6 +14540,16 @@ $Web::LangTag::Registry = {
                                                       'sa'
                                                     ]
                                       },
+                         'lemosin' => {
+                                        'Prefix' => [
+                                                      'oc'
+                                                    ]
+                                      },
+                         'lengadoc' => {
+                                         'Prefix' => [
+                                                       'oc'
+                                                     ]
+                                       },
                          'lipaw' => {
                                       'Prefix' => [
                                                     'sl-rozaj'
@@ -14069,6 +14586,11 @@ $Web::LangTag::Registry = {
                                                        'en-ca'
                                                      ]
                                        },
+                         'nicard' => {
+                                       'Prefix' => [
+                                                     'oc'
+                                                   ]
+                                     },
                          'njiva' => {
                                       'Prefix' => [
                                                     'sl-rozaj'
@@ -14089,11 +14611,37 @@ $Web::LangTag::Registry = {
                                                        'en'
                                                      ]
                                        },
+                         'pahawh2' => {
+                                        'Prefix' => [
+                                                      'hnj',
+                                                      'mww'
+                                                    ],
+                                        '_canon' => 'pahawh2'
+                                      },
+                         'pahawh3' => {
+                                        'Prefix' => [
+                                                      'hnj',
+                                                      'mww'
+                                                    ],
+                                        '_canon' => 'pahawh3'
+                                      },
+                         'pahawh4' => {
+                                        'Prefix' => [
+                                                      'hnj',
+                                                      'mww'
+                                                    ],
+                                        '_canon' => 'pahawh4'
+                                      },
                          'pamaka' => {
                                        'Prefix' => [
                                                      'djk'
                                                    ]
                                      },
+                         'peano' => {
+                                      'Prefix' => [
+                                                    'la'
+                                                  ]
+                                    },
                          'petr1708' => {
                                          'Prefix' => [
                                                        'ru'
@@ -14109,6 +14657,11 @@ $Web::LangTag::Registry = {
                          'polyton' => {
                                         'Prefix' => [
                                                       'el'
+                                                    ]
+                                      },
+                         'provenc' => {
+                                        'Prefix' => [
+                                                      'oc'
                                                     ]
                                       },
                          'puter' => {
@@ -14152,6 +14705,12 @@ $Web::LangTag::Registry = {
                                                     'kea'
                                                   ]
                                     },
+                         'spanglis' => {
+                                         'Prefix' => [
+                                                       'en',
+                                                       'es'
+                                                     ]
+                                       },
                          'surmiran' => {
                                          'Prefix' => [
                                                        'rm'
@@ -14211,9 +14770,19 @@ $Web::LangTag::Registry = {
                                                        'rm'
                                                      ]
                                        },
+                         'vivaraup' => {
+                                         'Prefix' => [
+                                                       'oc'
+                                                     ]
+                                       },
                          'wadegile' => {
                                          'Prefix' => [
                                                        'zh-latn'
+                                                     ]
+                                       },
+                         'xsistemo' => {
+                                         'Prefix' => [
+                                                       'eo'
                                                      ]
                                        }
                        }
